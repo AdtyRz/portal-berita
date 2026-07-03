@@ -1,9 +1,5 @@
-@extends('frontend.layouts.app')
-
-@section('content')
-@section('title', 'Achievements')
-
-
+<x-frontend.layouts.app>
+    <x-slot name="title">Achievements</x-slot>
 
     <section class="bg-neutral-900 text-white py-20">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -83,4 +79,4 @@
             @endif
         </div>
     </section>
-@endsection
+</x-frontend.layouts.app>

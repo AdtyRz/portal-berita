@@ -1,9 +1,5 @@
-@extends('frontend.layouts.app')
-
-@section('content')
-@section('title', '{{ $agenda->title }}')
-
-
+<x-frontend.layouts.app>
+    <x-slot name="title">{{ $agenda->title }}</x-slot>
 
     <article class="py-12">
         <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
@@ -57,4 +53,4 @@
             @endif
         </div>
     </article>
-@endsection
+</x-frontend.layouts.app>

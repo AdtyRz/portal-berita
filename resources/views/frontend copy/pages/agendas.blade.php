@@ -1,9 +1,5 @@
-@extends('frontend.layouts.app')
-
-@section('content')
-@section('title', 'Agendas & Events')
-
-
+<x-frontend.layouts.app>
+    <x-slot name="title">Agendas & Events</x-slot>
 
     <section class="bg-neutral-50 border-b border-neutral-200">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
@@ -77,4 +73,4 @@
             @endif
         </div>
     </section>
-@endsection
+</x-frontend.layouts.app>
