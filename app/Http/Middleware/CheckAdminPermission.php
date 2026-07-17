@@ -11,7 +11,7 @@ class CheckAdminPermission
     public function handle(Request $request, Closure $next): Response
     {
         $user = $request->user();
-        
+
         if (!$user) {
             return redirect()->route('login');
         }
@@ -22,8 +22,8 @@ class CheckAdminPermission
         }
 
         $routeName = $request->route()->getName();
-        
-        // Dashboard dan profile SELALU bisa diakses semua user yang login
+
+        // Dashboard dan profile SELALU bisa diakses
         if (in_array($routeName, ['admin.dashboard', 'profile.edit', 'profile.update', 'profile.destroy', 'logout'])) {
             return $next($request);
         }
@@ -32,9 +32,9 @@ class CheckAdminPermission
         if (str_starts_with($routeName, 'admin.')) {
             $parts = explode('.', $routeName);
             if (count($parts) >= 2) {
-                $module = $parts[1]; // contoh: 'posts', 'categories', 'comments'
+                $module = $parts[1]; // contoh: 'posts', 'categories'
                 $action = $parts[2] ?? 'index';
-                
+
                 // Mapping action ke nama permission
                 $permissionMap = [
                     'index' => "view {$module}",
@@ -50,9 +50,13 @@ class CheckAdminPermission
 
                 $requiredPermission = $permissionMap[$action] ?? "view {$module}";
 
+                // DEBUG: Uncomment baris di bawah untuk debug
+                // \Log::info("Checking permission: {$requiredPermission} for user {$user->id}");
+                // \Log::info("User has permission: " . ($user->can($requiredPermission) ? 'YES' : 'NO'));
+
                 // Jika user TIDAK punya permission, abort 403
                 if (!$user->can($requiredPermission)) {
-                    abort(403, 'Akses ditolak');
+                    abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengakses halaman ini.');
                 }
             }
         }

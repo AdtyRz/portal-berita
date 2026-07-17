@@ -134,8 +134,12 @@ Route::middleware(['auth', 'verified', 'active', 'admin.permission'])->prefix('a
         Route::resource('users', UserController::class);
 
         // Manage Admins & Permissions
-        Route::resource('manage-admins', ManageAdminController::class)->parameters(['manage-admins' => 'user',]);
-        Route::post('manage-admins/{user}/permissions', [ManageAdminController::class, 'updatePermissions'])->name('manage-admins.updatePermissions');
+        Route::get('manage-admins', [ManageAdminController::class, 'index'])->name('manage-admins.index');
+        Route::get('manage-admins/create', [ManageAdminController::class, 'create'])->name('manage-admins.create');
+        Route::post('manage-admins', [ManageAdminController::class, 'store'])->name('manage-admins.store');
+        Route::get('manage-admins/{user}/edit', [ManageAdminController::class, 'edit'])->name('manage-admins.edit');
+        Route::put('manage-admins/{user}', [ManageAdminController::class, 'update'])->name('manage-admins.update');
+        Route::delete('manage-admins/{user}', [ManageAdminController::class, 'destroy'])->name('manage-admins.destroy');
 
         // Settings & Logs
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
