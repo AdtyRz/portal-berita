@@ -53,6 +53,14 @@ class PostController extends Controller
     {
         $data = $request->validated();
         $data['user_id'] = auth()->id();
+        $data['excerpt'] = $request->input('excerpt');
+
+        // DEBUG: Cek apakah excerpt masuk
+        \Log::info('Post Store Data:', [
+            'excerpt' => $request->input('excerpt'),
+            'validated_excerpt' => $data['excerpt'] ?? 'NOT SET',
+            'all_data' => $data,
+        ]);
 
         if ($request->hasFile('thumbnail')) {
             $data['thumbnail'] = $request->file('thumbnail')->store('posts', 'public');
@@ -70,8 +78,8 @@ class PostController extends Controller
 
         ActivityLog::log('created', $post, "Created post: {$post->title}");
 
+        // Clear cache tanpa tagging
         Cache::forget('home_data_v1');
-        Cache::tags(['posts'])->flush();
 
         return redirect()->route('admin.posts.index')->with('success', 'Post created successfully.');
     }
@@ -87,6 +95,7 @@ class PostController extends Controller
     public function update(UpdatePostRequest $request, Post $post)
     {
         $data = $request->validated();
+        $data['excerpt'] = $request->input('excerpt');
 
         if ($request->hasFile('thumbnail')) {
             if ($post->thumbnail) {
@@ -107,8 +116,8 @@ class PostController extends Controller
 
         ActivityLog::log('updated', $post, "Updated post: {$post->title}");
 
+        // Clear cache tanpa tagging
         Cache::forget('home_data_v1');
-        Cache::tags(['posts'])->flush();
 
         return redirect()->route('admin.posts.index')->with('success', 'Post updated successfully.');
     }
@@ -123,6 +132,9 @@ class PostController extends Controller
 
         $post->delete();
         ActivityLog::log('deleted', $post, "Deleted post: {$title}");
+
+        // Clear cache tanpa tagging
+        Cache::forget('home_data_v1');
 
         return redirect()->route('admin.posts.index')->with('success', 'Post deleted successfully.');
     }

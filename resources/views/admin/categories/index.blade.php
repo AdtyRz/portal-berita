@@ -32,10 +32,11 @@
                     </select>
                 </div>
                 <div class="flex gap-2">
-                    <x-admin.button type="submit" variant="primary">Filter</x-admin.button>
                     <a href="{{ route('admin.categories.index') }}" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-200 rounded-lg hover:bg-neutral-50">
                         Reset
                     </a>
+                    <x-admin.button type="submit" variant="primary">Filter</x-admin.button>
+                    <a href="{{ route('admin.categories.create') }}" class="px-4 py-2 text-sm font-medium text-white bg-neutral-900 border border-neutral-900 rounded-lg hover:bg-neutral-800">Create New </a>
                 </div>
             </div>
         </form>

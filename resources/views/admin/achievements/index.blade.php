@@ -30,8 +30,9 @@
                     <option value="archived" @selected(request('status') === 'archived')>Archived</option>
                 </select>
                 <div class="flex gap-2">
-                    <x-admin.button type="submit">Filter</x-admin.button>
                     <a href="{{ route('admin.achievements.index') }}" class="px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-200 rounded-lg hover:bg-neutral-50">Reset</a>
+                    <x-admin.button type="submit">Filter</x-admin.button>
+                    <a href="{{ route('admin.achievements.create') }}" class="px-4 py-2 text-sm font-medium text-white bg-neutral-900 border border-neutral-900 rounded-lg hover:bg-neutral-800">Create New </a>
                 </div>
             </div>
         </form>

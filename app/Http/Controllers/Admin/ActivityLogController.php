@@ -13,14 +13,15 @@ class ActivityLogController extends Controller
         $query = ActivityLog::with('user');
 
         if ($request->filled('search')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('action', 'like', "%{$request->search}%")
-                  ->orWhere('description', 'like', "%{$request->search}%");
-            });
+            $query->where('description', 'like', "%{$request->search}%");
         }
 
-        if ($request->filled('user')) {
-            $query->where('user_id', $request->user);
+        if ($request->filled('user_id')) {
+            $query->where('user_id', $request->user_id);
+        }
+
+        if ($request->filled('action')) {
+            $query->where('action', $request->action);
         }
 
         $logs = $query->latest()->paginate(30)->withQueryString();

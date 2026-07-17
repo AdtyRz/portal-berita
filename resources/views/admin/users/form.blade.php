@@ -1,9 +1,12 @@
 @extends('admin.layouts.app')
 
-@section('content')
-@section('title', '{{ isset($user) ? 'Edit' : 'Create' }} User')
+@section('title', isset($user) ? 'Edit User' : 'Create User')
 
-    <x-admin.page-header title="{{ isset($user) ? 'Edit' : 'Create' }} User" description="Manage user account and permissions" />
+@section('content')
+    <x-admin.page-header 
+        title="{{ isset($user) ? 'Edit' : 'Create' }} User" 
+        description="Manage user account and permissions" 
+    />
 
     <form method="POST" action="{{ isset($user) ? route('admin.users.update', $user) : route('admin.users.store') }}" enctype="multipart/form-data" class="space-y-6">
         @csrf

@@ -3,46 +3,54 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Achievement;
+use App\Models\Agenda;
 use App\Models\Announcement;
 use App\Models\Comment;
 use App\Models\Contact;
+use App\Models\Organization;
 use App\Models\Post;
-use App\Models\User;
-use App\Models\Visitor;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
-    public function index(): View
-    {
-        $stats = [
+public function index()
+{
+    // Cache hanya 60 detik (1 menit) - lebih realtime
+    $stats = Cache::remember('dashboard_stats', 30, function () {
+        return [
             'total_posts' => Post::count(),
-            'published_posts' => Post::published()->count(),
-            'total_views' => Post::sum('total_views'),
+            'total_views' => (int) Post::sum('total_views'),
+            'pending_comments' => Comment::where('is_approved', false)->count(),
             'total_comments' => Comment::count(),
-            'pending_comments' => Comment::pending()->count(),
-            'total_users' => User::count(),
-            'visitors_today' => Visitor::today()->count(),
-            'unread_contacts' => Contact::unread()->count(),
-            'announcements' => Announcement::published()->count(),
+            'unread_contacts' => Contact::where('is_read', false)->count(),
+            'total_announcements' => Announcement::count(),
+            'total_agendas' => Agenda::count(),
+            'total_achievements' => Achievement::count(),
+            'total_organizations' => Organization::count(),
         ];
+    });
 
-        $recentPosts = Post::with('category', 'author')
-            ->latest()
-            ->take(5)
-            ->get();
+    // Recent posts (tidak pakai cache, selalu fresh)
+    $recentPosts = Post::with(['category', 'author'])
+        ->latest()
+        ->take(5)
+        ->get();
 
-        $recentComments = Comment::with('post', 'user')
-            ->latest()
-            ->take(5)
-            ->get();
+    // Recent comments (tidak pakai cache, selalu fresh)
+    $recentComments = Comment::with('post')
+        ->latest()
+        ->take(5)
+        ->get()
+        ->map(fn($comment) => [
+            'id' => $comment->id,
+            'author_name' => $comment->user?->name ?? $comment->name ?? 'Anonymous',
+            'content' => $comment->content,
+            'post_title' => $comment->post?->title ?? 'Unknown Post',
+            'is_approved' => $comment->is_approved,
+            'created_at' => $comment->created_at,
+        ]);
 
-        $recentContacts = Contact::unread()
-            ->latest()
-            ->take(5)
-            ->get();
-
-        return view('dashboard', compact('stats', 'recentPosts', 'recentComments', 'recentContacts'));
-    }
+    return view('admin.dashboard', compact('stats', 'recentPosts', 'recentComments'));
+}
 }

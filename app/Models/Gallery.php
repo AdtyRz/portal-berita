@@ -12,7 +12,7 @@ class Gallery extends Model
 
     protected $fillable = [
         'user_id', 'title', 'slug', 'description', 'cover_image',
-        'status', 'meta_title', 'meta_description', 'total_views',
+        'status', 'meta_title', 'meta_description', 'total_views', 'total_views', 'display_mode', 
     ];
 
     protected static function boot()

@@ -56,7 +56,7 @@ class Post extends Model
 
     public function approvedComments()
     {
-        return $this->hasMany(Comment::class)->where('is_approved', true);
+        return $this->hasMany(Comment::class)->where('is_approved', true)->latest();
     }
 
     public function reactions()
@@ -64,6 +64,9 @@ class Post extends Model
         return $this->morphMany(Reaction::class, 'reactable');
     }
 
+    /**
+     * Scope a query to only include published posts
+     */
     public function scopePublished($query)
     {
         return $query->where('status', 'published')
@@ -105,19 +108,22 @@ class Post extends Model
     {
         return $query->where(function ($q) use ($search) {
             $q->where('title', 'like', "%{$search}%")
-              ->orWhere('excerpt', 'like', "%{$search}%")
-              ->orWhere('content', 'like', "%{$search}%");
+                ->orWhere('excerpt', 'like', "%{$search}%")
+                ->orWhere('content', 'like', "%{$search}%");
         });
     }
 
     public function getThumbnailUrlAttribute(): string
     {
-        return $this->thumbnail ? asset('storage/' . $this->thumbnail) : asset('images/default-post.jpg');
+        return $this->thumbnail ? asset('storage/'.$this->thumbnail) : asset('images/default-post.jpg');
     }
 
-    public function incrementViews(): void
+    /**
+     * Increment view count
+     */
+    public function incrementViews(int $amount = 1): void
     {
-        $this->increment('total_views');
+        $this->increment('total_views', $amount);
     }
 
     public function relatedPosts($limit = 4)

@@ -14,8 +14,9 @@
         <form method="GET" class="p-4">
             <div class="flex gap-4">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Search tags..." class="flex-1 px-3.5 py-2 bg-white border border-neutral-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900/10 focus:border-neutral-400">
-                <x-admin.button type="submit">Filter</x-admin.button>
                 <a href="{{ route('admin.tags.index') }}" class="px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-200 rounded-lg hover:bg-neutral-50">Reset</a>
+                <x-admin.button type="submit">Filter</x-admin.button>
+                <a href="{{ route('admin.tags.create') }}" class="px-4 py-2 text-sm font-medium text-white bg-neutral-900 border border-neutral-900 rounded-lg hover:bg-neutral-800">Create New </a>
             </div>
         </form>
     </x-admin.card>

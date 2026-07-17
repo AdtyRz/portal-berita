@@ -26,12 +26,25 @@ class HeroSliderController extends Controller
     public function store(StoreHeroSliderRequest $request)
     {
         $data = $request->validated();
+        
+        // FIX: Auto-generate order jika tidak ada
+        if (!isset($data['order']) || is_null($data['order']) || empty($data['order'])) {
+            $data['order'] = (HeroSlider::max('order') ?? 0) + 1;
+        }
+        
+        // Handle image upload
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('hero-sliders', 'public');
         }
+        
         $slider = HeroSlider::create($data);
+        
+        // Activity log
         ActivityLog::log('created', $slider, "Created hero slider: {$slider->title}");
-        return redirect()->route('admin.hero-sliders.index')->with('success', 'Hero slider created.');
+        
+        return redirect()
+            ->route('admin.hero-sliders.index')
+            ->with('success', 'Hero slider created successfully.');
     }
 
     public function edit(HeroSlider $heroSlider)
@@ -42,19 +55,37 @@ class HeroSliderController extends Controller
     public function update(UpdateHeroSliderRequest $request, HeroSlider $heroSlider)
     {
         $data = $request->validated();
+        
+        // FIX: Auto-generate order jika tidak ada
+        if (!isset($data['order']) || is_null($data['order']) || empty($data['order'])) {
+            $data['order'] = $heroSlider->order;
+        }
+        
         if ($request->hasFile('image')) {
-            if ($heroSlider->image) Storage::disk('public')->delete($heroSlider->image);
+            if ($heroSlider->image) {
+                Storage::disk('public')->delete($heroSlider->image);
+            }
             $data['image'] = $request->file('image')->store('hero-sliders', 'public');
         }
+        
         $heroSlider->update($data);
         ActivityLog::log('updated', $heroSlider, "Updated hero slider: {$heroSlider->title}");
-        return redirect()->route('admin.hero-sliders.index')->with('success', 'Hero slider updated.');
+        
+        return redirect()
+            ->route('admin.hero-sliders.index')
+            ->with('success', 'Hero slider updated.');
     }
 
     public function destroy(HeroSlider $heroSlider)
     {
-        if ($heroSlider->image) Storage::disk('public')->delete($heroSlider->image);
+        if ($heroSlider->image) {
+            Storage::disk('public')->delete($heroSlider->image);
+        }
         $heroSlider->delete();
-        return redirect()->route('admin.hero-sliders.index')->with('success', 'Hero slider deleted.');
+        ActivityLog::log('deleted', $heroSlider, "Deleted hero slider: {$heroSlider->title}");
+        
+        return redirect()
+            ->route('admin.hero-sliders.index')
+            ->with('success', 'Hero slider deleted.');
     }
 }

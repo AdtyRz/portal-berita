@@ -11,30 +11,43 @@ class Organization extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'name', 'slug', 'description', 'logo', 'photo', 'position',
-        'organization_type', 'order', 'status',
-        'facebook', 'instagram', 'twitter', 'linkedin',
+        'name',
+        'slug',
+        'position',
+        'description',
+        'vision',
+        'mission',
+        'achievements',
+        'photo',
+        'organization_type',
+        'facebook',
+        'instagram',
+        'twitter',
+        'linkedin',
+        'contact_email',
+        'contact_phone',
+        'order',
+        'status',
     ];
 
     protected $casts = [
         'status' => 'boolean',
     ];
 
-    protected $appends = ['social_links'];
-
     protected static function boot()
     {
         parent::boot();
-        static::creating(function ($org) {
-            if (empty($org->slug)) {
-                $org->slug = Str::slug($org->name);
+
+        static::creating(function ($organization) {
+            if (empty($organization->slug)) {
+                $organization->slug = Str::slug($organization->name);
             }
         });
     }
 
     public function scopeActive($query)
     {
-        return $query->where('status', true);
+        return $query->where('status', 1);
     }
 
     public function scopeOrdered($query)
@@ -42,28 +55,59 @@ class Organization extends Model
         return $query->orderBy('order')->orderBy('name');
     }
 
-    public function scopeByType($query, $type)
+    public function galleries()
     {
-        return $query->where('organization_type', $type);
+        return $this->hasMany(OrganizationGallery::class)->ordered();
     }
 
-    public function getLogoUrlAttribute(): string
+    public function featuredGalleries()
     {
-        return $this->logo ? asset('storage/' . $this->logo) : asset('images/default-avatar.png');
+        return $this->hasMany(OrganizationGallery::class)
+            ->featured()
+            ->ordered();
     }
 
     public function getPhotoUrlAttribute(): string
     {
-        return $this->photo ? asset('storage/' . $this->photo) : asset('images/default-avatar.png');
+        return $this->photo ? asset('storage/' . $this->photo) : asset('images/default-org.jpg');
     }
 
-    public function getSocialLinksAttribute(): array
+    public function getGalleryCountAttribute(): int
     {
-        return collect([
-            'facebook' => $this->facebook,
-            'instagram' => $this->instagram,
-            'twitter' => $this->twitter,
-            'linkedin' => $this->linkedin,
-        ])->filter()->toArray();
+        return $this->galleries()->count();
+    }
+
+    public function getRecentActivities($limit = 6)
+    {
+        return $this->galleries()
+            ->orderBy('event_date', 'desc')
+            ->take($limit)
+            ->get();
+    }
+
+    public function getActivitiesByYear($year)
+    {
+        return $this->galleries()
+            ->byYear($year)
+            ->ordered()
+            ->get();
+    }
+
+    public function getAvailableYears()
+    {
+        return $this->galleries()
+            ->selectRaw('YEAR(event_date) as year')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year');
+    }
+
+    public function getEventTypes()
+    {
+        return $this->galleries()
+            ->select('event_type')
+            ->distinct()
+            ->whereNotNull('event_type')
+            ->pluck('event_type');
     }
 }

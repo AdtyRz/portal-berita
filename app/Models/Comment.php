@@ -62,4 +62,10 @@ class Comment extends Model
     {
         return $this->user ? $this->user->email : $this->email;
     }
+
+    // public function increment(string $column = 'total_views', int $amount = 1)
+    // {
+    //     $this->increment($column, $amount);
+    // }
+
 }

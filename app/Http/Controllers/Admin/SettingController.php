@@ -3,61 +3,75 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Setting;
-use App\Models\SocialMedia;
+use App\Models\SchoolProfile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SettingController extends Controller
 {
     public function index()
     {
-        $general = Setting::getGroup('general');
-        $seo = Setting::getGroup('seo');
-        $socials = SocialMedia::ordered()->get();
-
-        return view('admin.settings.index', compact('general', 'seo', 'socials'));
+        $profile = SchoolProfile::getCurrent();
+        return view('admin.settings.index', compact('profile'));
     }
 
     public function update(Request $request)
     {
-        $request->validate([
-            'site_name' => ['required', 'string', 'max:255'],
-            'site_description' => ['nullable', 'string', 'max:500'],
-            'site_email' => ['nullable', 'email', 'max:255'],
-            'site_phone' => ['nullable', 'string', 'max:50'],
-            'site_address' => ['nullable', 'string', 'max:500'],
-            'meta_title' => ['nullable', 'string', 'max:255'],
-            'meta_description' => ['nullable', 'string', 'max:500'],
-            'meta_keywords' => ['nullable', 'string', 'max:255'],
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'short_name' => ['nullable', 'string', 'max:50'],
+            'tagline' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:2000'],
+            'vision' => ['nullable', 'string', 'max:2000'],
+            'mission' => ['nullable', 'string', 'max:5000'],
+            'address' => ['nullable', 'string', 'max:500'],
+            'phone' => ['nullable', 'string', 'max:50'],
+            'email' => ['nullable', 'email', 'max:255'],
+            'website' => ['nullable', 'url', 'max:255'],
+            'founded_year' => ['nullable', 'integer', 'min:1900', 'max:' . date('Y')],
+            'accreditation' => ['nullable', 'string', 'max:50'],
+            'principal_name' => ['nullable', 'string', 'max:255'],
+            'facebook' => ['nullable', 'url', 'max:255'],
+            'instagram' => ['nullable', 'url', 'max:255'],
+            'twitter' => ['nullable', 'url', 'max:255'],
+            'youtube' => ['nullable', 'url', 'max:255'],
+            'linkedin' => ['nullable', 'url', 'max:255'],
+            'tiktok' => ['nullable', 'url', 'max:255'],
+            'logo' => ['nullable', 'image', 'max:2048'],
+            'favicon' => ['nullable', 'image', 'max:1024'],
+            'cover_image' => ['nullable', 'image', 'max:5120'],
         ]);
 
-        // General settings
-        Setting::set('site_name', $request->site_name, 'text', 'general');
-        Setting::set('site_description', $request->site_description, 'text', 'general');
-        Setting::set('site_email', $request->site_email, 'text', 'general');
-        Setting::set('site_phone', $request->site_phone, 'text', 'general');
-        Setting::set('site_address', $request->site_address, 'text', 'general');
+        $profile = SchoolProfile::getCurrent();
 
-        // SEO settings
-        Setting::set('meta_title', $request->meta_title, 'text', 'seo');
-        Setting::set('meta_description', $request->meta_description, 'text', 'seo');
-        Setting::set('meta_keywords', $request->meta_keywords, 'text', 'seo');
-
-        // Social media
-        if ($request->has('socials')) {
-            SocialMedia::query()->delete();
-            foreach ($request->socials as $index => $social) {
-                if (!empty($social['url'])) {
-                    SocialMedia::create([
-                        'platform' => $social['platform'],
-                        'url' => $social['url'],
-                        'order' => $index,
-                        'status' => true,
-                    ]);
-                }
-            }
+        // Handle file uploads
+        if ($request->hasFile('logo')) {
+            if ($profile->logo) Storage::disk('public')->delete($profile->logo);
+            $validated['logo'] = $request->file('logo')->store('school', 'public');
         }
 
-        return back()->with('success', 'Settings updated successfully.');
+        if ($request->hasFile('favicon')) {
+            if ($profile->favicon) Storage::disk('public')->delete($profile->favicon);
+            $validated['favicon'] = $request->file('favicon')->store('school', 'public');
+        }
+
+        if ($request->hasFile('cover_image')) {
+            if ($profile->cover_image) Storage::disk('public')->delete($profile->cover_image);
+            $validated['cover_image'] = $request->file('cover_image')->store('school', 'public');
+        }
+
+        // Handle mission (simpan sebagai text, pisah per baris)
+        if (isset($validated['mission'])) {
+            // Keep as string with newlines
+            $validated['mission'] = $validated['mission'];
+        }
+
+        $profile->update($validated);
+
+        // Clear cache
+        SchoolProfile::clearCache();
+        \Illuminate\Support\Facades\Cache::forget('home_data_v1');
+
+        return redirect()->back()->with('success', 'School profile updated successfully.');
     }
 }

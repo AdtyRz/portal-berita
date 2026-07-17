@@ -1,9 +1,12 @@
 @extends('admin.layouts.app')
 
-@section('content')
-@section('title', '{{ isset($agenda) ? 'Edit' : 'Create' }} Agenda')
+@section('title', isset($agenda) ? 'Edit Agenda' : 'Create Agenda')
 
-    <x-admin.page-header title="{{ isset($agenda) ? 'Edit' : 'Create' }} Agenda" description="Schedule school events" />
+@section('content')
+    <x-admin.page-header 
+        title="{{ isset($agenda) ? 'Edit' : 'Create' }} Agenda" 
+        description="Schedule school events" 
+    />
 
     <form method="POST" action="{{ isset($agenda) ? route('admin.agendas.update', $agenda) : route('admin.agendas.store') }}" enctype="multipart/form-data" class="space-y-6">
         @csrf
@@ -37,8 +40,8 @@
                     <div class="p-6 space-y-4">
                         <h3 class="text-base font-semibold text-neutral-900">Schedule</h3>
                         <x-admin.select label="Status" name="status" :options="['draft' => 'Draft', 'published' => 'Published', 'cancelled' => 'Cancelled', 'completed' => 'Completed']" :value="old('status', $agenda->status ?? 'draft')" required />
-                        <x-admin.input label="Start Date" name="start_date" type="datetime-local" :value="old('start_date', $agenda->start_date?->format('Y-m-d\TH:i') ?? '')" required />
-                        <x-admin.input label="End Date" name="end_date" type="datetime-local" :value="old('end_date', $agenda->end_date?->format('Y-m-d\TH:i') ?? '')" />
+                        <x-admin.input label="Start Date" name="start_date" type="datetime-local" :value="old('start_date', isset($agenda) && $agenda->start_date ? $agenda->start_date->format('Y-m-d\TH:i') : '')" required />
+                        <x-admin.input label="End Date" name="end_date" type="datetime-local" :value="old('end_date', isset($agenda) && $agenda->end_date ? $agenda->end_date->format('Y-m-d\TH:i') : '')" />
                         <div class="flex items-center gap-3">
                             <input type="hidden" name="is_all_day" value="0">
                             <input type="checkbox" name="is_all_day" value="1" id="is_all_day" @checked(old('is_all_day', $agenda->is_all_day ?? false)) class="rounded border-neutral-300 text-neutral-900 focus:ring-neutral-900/20">
@@ -53,7 +56,7 @@
                         <h3 class="text-base font-semibold text-neutral-900">Thumbnail</h3>
                         @if(isset($agenda) && $agenda->thumbnail)
                             <div class="mb-3">
-                                <img src="{{ $agenda->thumbnail_url }}" alt="" class="w-full h-32 object-cover rounded-lg">
+                                <img src="{{ asset('storage/' . $agenda->thumbnail) }}" alt="" class="w-full h-32 object-cover rounded-lg">
                             </div>
                         @endif
                         <input type="file" name="thumbnail" accept="image/*" class="block w-full text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-neutral-100 file:text-neutral-700 hover:file:bg-neutral-200">

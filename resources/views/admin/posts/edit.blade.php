@@ -1,12 +1,13 @@
 @extends('admin.layouts.app')
 
-@section('content')
 @section('title', 'Edit Post')
 
+@section('content')
     <x-admin.page-header title="Edit Post" description="Update article content and settings" />
 
     <form method="POST" action="{{ route('admin.posts.update', $post) }}" enctype="multipart/form-data" class="space-y-6">
-        @csrf @method('PUT')
+        @csrf
+        @method('PUT')
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div class="lg:col-span-2 space-y-6">
@@ -14,10 +15,32 @@
                     <div class="p-6 space-y-6">
                         <x-admin.input label="Title" name="title" :value="old('title', $post->title)" required />
                         <x-admin.input label="Slug" name="slug" :value="old('slug', $post->slug)" />
-                        <x-admin.textarea label="Excerpt" name="excerpt" :value="old('excerpt', $post->excerpt)" rows="3" />
+                        
+                        {{-- ✅ FIX:_excerpt HARUS ambil dari $post->excerpt --}}
+                        <div>
+                            <label for="excerpt" class="block text-sm font-medium text-neutral-700 mb-1.5">
+                                Excerpt
+                            </label>
+                            <textarea 
+                                name="excerpt" 
+                                id="excerpt" 
+                                rows="3"
+                                maxlength="500"
+                                class="block w-full px-3.5 py-2 bg-white border border-neutral-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900/10 focus:border-neutral-400 @error('excerpt') border-red-300 @enderror"
+                                placeholder="Brief summary for listings..."
+                            >{{ old('excerpt', $post->excerpt) }}</textarea>
+                            @error('excerpt')
+                                <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                            @enderror
+                            <p class="mt-1 text-xs text-neutral-500">Brief summary for listings (max 500 characters)</p>
+                        </div>
+
                         <div>
                             <label class="block text-sm font-medium text-neutral-700 mb-1.5">Content <span class="text-red-500">*</span></label>
-                            <textarea name="content" id="content" rows="15" class="block w-full px-3.5 py-2 bg-white border border-neutral-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900/10 focus:border-neutral-400">{{ old('content', $post->content) }}</textarea>
+                            <textarea name="content" id="content" rows="15" class="block w-full px-3.5 py-2 bg-white border border-neutral-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900/10 focus:border-neutral-400 @error('content') border-red-300 @enderror">{{ old('content', $post->content) }}</textarea>
+                            @error('content')
+                                <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
                 </x-admin.card>

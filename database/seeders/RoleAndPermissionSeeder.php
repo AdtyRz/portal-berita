@@ -5,114 +5,67 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use Spatie\Permission\PermissionRegistrar;
 
 class RoleAndPermissionSeeder extends Seeder
 {
-    public function run(): void
+    public function run()
     {
-        app()[PermissionRegistrar::class]->forgetCachedPermissions();
+        // Reset cached roles and permissions
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Permissions
-        $permissions = [
-            // User Management
-            'view-users', 'create-users', 'edit-users', 'delete-users',
-            
-            // Role Management (Super Admin Only)
-            'view-roles', 'create-roles', 'edit-roles', 'delete-roles',
-            
-            // Content Management
-            'view-posts', 'create-posts', 'edit-posts', 'delete-posts', 'publish-posts',
-            'view-categories', 'create-categories', 'edit-categories', 'delete-categories',
-            'view-tags', 'create-tags', 'edit-tags', 'delete-tags',
-            
-            // Comments
-            'view-comments', 'approve-comments', 'delete-comments',
-            
-            // Announcements
-            'view-announcements', 'create-announcements', 'edit-announcements', 'delete-announcements',
-            
-            // Agendas
-            'view-agendas', 'create-agendas', 'edit-agendas', 'delete-agendas',
-            
-            // Achievements
-            'view-achievements', 'create-achievements', 'edit-achievements', 'delete-achievements',
-            
-            // Media
-            'view-galleries', 'create-galleries', 'edit-galleries', 'delete-galleries',
-            'view-videos', 'create-videos', 'edit-videos', 'delete-videos',
-            'view-documents', 'create-documents', 'edit-documents', 'delete-documents',
-            
-            // Website
-            'view-profile', 'edit-profile',
-            'view-hero-sliders', 'create-hero-sliders', 'edit-hero-sliders', 'delete-hero-sliders',
-            'view-banners', 'create-banners', 'edit-banners', 'delete-banners',
-            'view-organizations', 'create-organizations', 'edit-organizations', 'delete-organizations',
-            
-            // Contacts
-            'view-contacts', 'delete-contacts',
-            
-            // Settings (Super Admin Only)
-            'view-settings', 'edit-settings',
-            'view-activity-logs',
-            
-            // Analytics
-            'view-analytics',
+        // 1. Definisikan SEMUA modul dan aksi yang diizinkan
+        $modules = [
+            'posts'            => ['view', 'create', 'edit', 'delete'],
+            'categories'       => ['view', 'create', 'edit', 'delete'],
+            'tags'             => ['view', 'create', 'edit', 'delete'],
+            'announcements'    => ['view', 'create', 'edit', 'delete'],
+            'agendas'          => ['view', 'create', 'edit', 'delete'],
+            'achievements'     => ['view', 'create', 'edit', 'delete'],
+            'galleries'        => ['view', 'create', 'edit', 'delete'],
+            'videos'           => ['view', 'create', 'edit', 'delete'],
+            'documents'        => ['view', 'create', 'edit', 'delete'],
+            'hero-sliders'     => ['view', 'create', 'edit', 'delete'],
+            'banners'          => ['view', 'create', 'edit', 'delete'],
+            'organizations'    => ['view', 'create', 'edit', 'delete'],
+            'comments'         => ['view', 'approve', 'delete'],
+            'contacts'         => ['view', 'delete'],
+            'users'            => ['view', 'create', 'edit', 'delete'],
+            'settings'         => ['view', 'edit'],
+            'activity-logs'    => ['view'],
+            'manage-admins'    => ['view', 'edit', 'delete'],
         ];
 
-        foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+        // 2. Buat Permission ke Database (firstOrCreate agar tidak duplikat)
+        foreach ($modules as $module => $actions) {
+            foreach ($actions as $action) {
+                Permission::firstOrCreate(['name' => "{$action} {$module}"]);
+            }
         }
 
-        // Super Admin - All permissions
-        $superAdmin = Role::create(['name' => 'super-admin']);
-        $superAdmin->givePermissionTo(Permission::all());
+        // 3. Buat Roles
+        $superAdminRole = Role::firstOrCreate(['name' => 'super-admin']);
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
 
-        // Admin - Most permissions except role management
-        $admin = Role::create(['name' => 'admin']);
-        $admin->givePermissionTo([
-            'view-users', 'create-users', 'edit-users', 'delete-users',
-            'view-posts', 'create-posts', 'edit-posts', 'delete-posts', 'publish-posts',
-            'view-categories', 'create-categories', 'edit-categories', 'delete-categories',
-            'view-tags', 'create-tags', 'edit-tags', 'delete-tags',
-            'view-comments', 'approve-comments', 'delete-comments',
-            'view-announcements', 'create-announcements', 'edit-announcements', 'delete-announcements',
-            'view-agendas', 'create-agendas', 'edit-agendas', 'delete-agendas',
-            'view-achievements', 'create-achievements', 'edit-achievements', 'delete-achievements',
-            'view-galleries', 'create-galleries', 'edit-galleries', 'delete-galleries',
-            'view-videos', 'create-videos', 'edit-videos', 'delete-videos',
-            'view-documents', 'create-documents', 'edit-documents', 'delete-documents',
-            'view-profile', 'edit-profile',
-            'view-hero-sliders', 'create-hero-sliders', 'edit-hero-sliders', 'delete-hero-sliders',
-            'view-banners', 'create-banners', 'edit-banners', 'delete-banners',
-            'view-organizations', 'create-organizations', 'edit-organizations', 'delete-organizations',
-            'view-contacts', 'delete-contacts',
-            'view-settings', 'edit-settings',
-            'view-activity-logs',
-            'view-analytics',
-        ]);
+        // 4. Berikan SEMUA permission ke Super Admin
+        $superAdminRole->givePermissionTo(Permission::all());
 
-        // Editor - Content only
-        $editor = Role::create(['name' => 'editor']);
-        $editor->givePermissionTo([
-            'view-posts', 'create-posts', 'edit-posts',
-            'view-categories', 'create-categories', 'edit-categories',
-            'view-tags', 'create-tags', 'edit-tags',
-            'view-comments', 'approve-comments',
-            'view-announcements', 'create-announcements', 'edit-announcements',
-            'view-agendas', 'create-agendas', 'edit-agendas',
-            'view-achievements', 'create-achievements', 'edit-achievements',
-            'view-galleries', 'create-galleries', 'edit-galleries',
-            'view-videos', 'create-videos', 'edit-videos',
-            'view-documents', 'create-documents', 'edit-documents',
-        ]);
-
-        // Author - Write only
-        $author = Role::create(['name' => 'author']);
-        $author->givePermissionTo([
-            'view-posts', 'create-posts', 'edit-posts',
-            'view-categories',
-            'view-tags',
-        ]);
+        // 5. Berikan permission default ke Admin Biasa (bisa diubah nanti via UI Manage Admins)
+        $adminDefaultPermissions = [
+            'view posts', 'create posts', 'edit posts', 'delete posts',
+            'view categories', 'create categories', 'edit categories', 'delete categories',
+            'view tags', 'create tags', 'edit tags', 'delete tags',
+            'view announcements', 'create announcements', 'edit announcements', 'delete announcements',
+            'view agendas', 'create agendas', 'edit agendas', 'delete agendas',
+            'view achievements', 'create achievements', 'edit achievements', 'delete achievements',
+            'view galleries', 'create galleries', 'edit galleries', 'delete galleries',
+            'view videos', 'create videos', 'edit videos', 'delete videos',
+            'view documents', 'create documents', 'edit documents', 'delete documents',
+            'view comments', 'approve comments', 'delete comments',
+            'view contacts', 'delete contacts',
+            'view settings', 'edit settings',
+        ];
+        
+        // Sync permission agar admin punya permission default ini
+        $adminRole->syncPermissions($adminDefaultPermissions);
     }
 }

@@ -1,9 +1,12 @@
 @extends('admin.layouts.app')
 
-@section('content')
-@section('title', '{{ isset($banner) ? 'Edit' : 'Create' }} Banner')
+@section('title', isset($banner) ? 'Edit Banner' : 'Create Banner')
 
-    <x-admin.page-header title="{{ isset($banner) ? 'Edit' : 'Create' }} Banner" description="Create promotional banner" />
+@section('content')
+    <x-admin.page-header 
+        title="{{ isset($banner) ? 'Edit' : 'Create' }} Banner" 
+        description="Create promotional banner" 
+    />
 
     <form method="POST" action="{{ isset($banner) ? route('admin.banners.update', $banner) : route('admin.banners.store') }}" enctype="multipart/form-data" class="space-y-6">
         @csrf
@@ -30,8 +33,8 @@
                             <input type="checkbox" name="status" value="1" id="status" @checked(old('status', $banner->status ?? true)) class="rounded border-neutral-300 text-neutral-900 focus:ring-neutral-900/20">
                             <label for="status" class="text-sm text-neutral-700">Active</label>
                         </div>
-                        <x-admin.input label="Start Date" name="start_date" type="datetime-local" :value="old('start_date', $banner->start_date?->format('Y-m-d\TH:i') ?? '')" />
-                        <x-admin.input label="End Date" name="end_date" type="datetime-local" :value="old('end_date', $banner->end_date?->format('Y-m-d\TH:i') ?? '')" />
+                        <x-admin.input label="Start Date" name="start_date" type="datetime-local" :value="old('start_date', isset($banner) && $banner->start_date ? $banner->start_date->format('Y-m-d\TH:i') : '')" />
+                        <x-admin.input label="End Date" name="end_date" type="datetime-local" :value="old('end_date', isset($banner) && $banner->end_date ? $banner->end_date->format('Y-m-d\TH:i') : '')" />
                     </div>
                 </x-admin.card>
 
@@ -43,7 +46,7 @@
                                 <img src="{{ asset('storage/' . $banner->image) }}" alt="" class="w-full h-32 object-cover rounded-lg">
                             </div>
                         @endif
-                        <input type="file" name="image" accept="image/*" required class="block w-full text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-neutral-100 file:text-neutral-700 hover:file:bg-neutral-200">
+                        <input type="file" name="image" accept="image/*" {{ !isset($banner) ? 'required' : '' }} class="block w-full text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-neutral-100 file:text-neutral-700 hover:file:bg-neutral-200">
                     </div>
                 </x-admin.card>
             </div>

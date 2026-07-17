@@ -97,21 +97,66 @@
                         </svg>
                         News
                     </a>
-                    <a href="{{ route('frontend.about') }}"
-                        class="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-neutral-700 hover:text-neutral-900 hover:bg-white/50 rounded-lg transition-all {{ request()->routeIs('frontend.about') ? 'bg-white/50 text-neutral-900' : '' }}">
+                    <a href="{{ route('frontend.announcements.index') }}"
+                        class="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-neutral-700 hover:text-neutral-900 hover:bg-white/50 rounded-lg transition-all {{ request()->routeIs('frontend.announcements.*') ? 'bg-white/50 text-neutral-900' : '' }}">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
                         </svg>
-                        About
+                        Announcements
+                    </a>
+                    <a href="{{ route('frontend.agendas.index') }}"
+                        class="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-neutral-700 hover:text-neutral-900 hover:bg-white/50 rounded-lg transition-all {{ request()->routeIs('frontend.agendas.*') ? 'bg-white/50 text-neutral-900' : '' }}">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        Agendas
+                    </a>
+                    <a href="{{ route('frontend.achievements.index') }}"
+                        class="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-neutral-700 hover:text-neutral-900 hover:bg-white/50 rounded-lg transition-all {{ request()->routeIs('frontend.achievements.*') ? 'bg-white/50 text-neutral-900' : '' }}">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                        </svg>
+                        Achievements
+                    </a>
+                    <a href="{{ route('frontend.videos.index') }}"
+                        class="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-neutral-700 hover:text-neutral-900 hover:bg-white/50 rounded-lg transition-all {{ request()->routeIs('frontend.videos.*') ? 'bg-white/50 text-neutral-900' : '' }}">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                        Videos
+                    </a>
+                    <a href="{{ route('frontend.documents.index') }}"
+                        class="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-neutral-700 hover:text-neutral-900 hover:bg-white/50 rounded-lg transition-all {{ request()->routeIs('frontend.documents.*') ? 'bg-white/50 text-neutral-900' : '' }}">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                        Documents
                     </a>
                     <a href="{{ route('frontend.gallery') }}"
                         class="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-neutral-700 hover:text-neutral-900 hover:bg-white/50 rounded-lg transition-all {{ request()->routeIs('frontend.gallery') ? 'bg-white/50 text-neutral-900' : '' }}">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                         Gallery
+                    </a>
+                    <a href="{{ route('frontend.about') }}"
+                        class="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-neutral-700 hover:text-neutral-900 hover:bg-white/50 rounded-lg transition-all {{ request()->routeIs('frontend.about') ? 'bg-white/50 text-neutral-900' : '' }}">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        About
                     </a>
                     <a href="{{ route('frontend.contact') }}"
                         class="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-neutral-700 hover:text-neutral-900 hover:bg-white/50 rounded-lg transition-all {{ request()->routeIs('frontend.contact') ? 'bg-white/50 text-neutral-900' : '' }}">

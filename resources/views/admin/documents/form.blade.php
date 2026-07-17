@@ -1,9 +1,12 @@
 @extends('admin.layouts.app')
 
-@section('content')
-@section('title', '{{ isset($document) ? 'Edit' : 'Create' }} Document')
+@section('title', isset($document) ? 'Edit Document' : 'Create Document')
 
-    <x-admin.page-header title="{{ isset($document) ? 'Edit' : 'Create' }} Document" description="Upload and manage downloadable documents" />
+@section('content')
+    <x-admin.page-header 
+        title="{{ isset($document) ? 'Edit' : 'Create' }} Document" 
+        description="Upload and manage downloadable documents" 
+    />
 
     <form method="POST" action="{{ isset($document) ? route('admin.documents.update', $document) : route('admin.documents.store') }}" enctype="multipart/form-data" class="space-y-6">
         @csrf

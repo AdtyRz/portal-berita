@@ -14,6 +14,7 @@ class StoreGalleryRequest extends FormRequest
             'description' => ['nullable', 'string', 'max:500'],
             'cover_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'images' => ['nullable', 'array'],
+            'display_mode' => ['required', 'in:grid,detailed'],
             'images.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'status' => ['required', 'in:draft,published,archived'],
             'meta_title' => ['nullable', 'string', 'max:255'],

@@ -15,6 +15,16 @@ class GalleryItem extends Model
 
     public function getImageUrlAttribute(): string
     {
-        return asset('storage/' . $this->image);
+        return asset('storage/'.$this->image);
+    }
+
+    public function items()
+    {
+        return $this->hasMany(GalleryItem::class)->orderBy('order');
+    }
+
+    public function scopePublished($query)
+    {
+        return $query->where('status', 'published');
     }
 }

@@ -6,31 +6,82 @@ use Illuminate\Database\Eloquent\Model;
 
 class SchoolProfile extends Model
 {
-    protected $fillable = ['key', 'value', 'type', 'group', 'description'];
+    protected $fillable = [
+        'name',
+        'short_name',
+        'tagline',
+        'description',
+        'vision',
+        'mission',
+        'address',
+        'phone',
+        'email',
+        'website',
+        'founded_year',
+        'accreditation',
+        'principal_name',
+        'facebook',
+        'instagram',
+        'twitter',
+        'youtube',
+        'linkedin',
+        'tiktok',
+        'logo',
+        'favicon',
+        'cover_image',
+    ];
 
-    public static function get(string $key, $default = null)
+    protected $casts = [
+        'mission' => 'array',
+    ];
+
+    public static function getCurrent(): self
     {
-        $profile = static::where('key', $key)->first();
-        return $profile ? $profile->value : $default;
+        return cache()->remember('school_profile', 3600, function () {
+            return self::first() ?? self::create([
+                'name' => 'School Portal',
+                'short_name' => 'SP',
+                'tagline' => 'Excellence in Education',
+                'description' => 'Providing quality education and fostering excellence in students.',
+            ]);
+        });
     }
 
-    public static function set(string $key, $value, string $type = 'text', string $group = 'general'): void
+    public static function clearCache(): void
     {
-        static::updateOrCreate(
-            ['key' => $key],
-            ['value' => $value, 'type' => $type, 'group' => $group]
-        );
+        cache()->forget('school_profile');
     }
 
-    public static function getGroup(string $group): array
+    public function getLogoUrlAttribute(): ?string
     {
-        return static::where('group', $group)
-            ->pluck('value', 'key')
-            ->toArray();
+        return $this->logo ? asset('storage/' . $this->logo) : null;
     }
 
-    public function scopeByGroup($query, string $group)
+    public function getCoverUrlAttribute(): ?string
     {
-        return $query->where('group', $group);
+        return $this->cover_image ? asset('storage/' . $this->cover_image) : null;
+    }
+
+    public function getMissionListAttribute(): array
+    {
+        if (is_array($this->mission)) {
+            return $this->mission;
+        }
+        if (is_string($this->mission)) {
+            return array_filter(array_map('trim', explode("\n", $this->mission)));
+        }
+        return [];
+    }
+
+    public function getSocialLinksAttribute(): array
+    {
+        return array_filter([
+            'facebook' => $this->facebook,
+            'instagram' => $this->instagram,
+            'twitter' => $this->twitter,
+            'youtube' => $this->youtube,
+            'linkedin' => $this->linkedin,
+            'tiktok' => $this->tiktok,
+        ]);
     }
 }

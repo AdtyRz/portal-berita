@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
-@section('content')
 @section('title', 'Posts')
+@section('content')
 
     <x-admin.page-header title="Posts" description="Manage news articles and content">
         <x-admin.button href="{{ route('admin.posts.create') }}">
@@ -27,8 +27,9 @@
                     @endforeach
                 </select>
                 <div class="flex gap-2">
-                    <x-admin.button type="submit">Filter</x-admin.button>
                     <a href="{{ route('admin.posts.index') }}" class="px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-200 rounded-lg hover:bg-neutral-50">Reset</a>
+                    <x-admin.button type="submit">Filter</x-admin.button>
+                    <a href="{{ route('admin.posts.create') }}" class="px-4 py-2 text-sm font-medium text-white bg-neutral-900 border border-neutral-900 rounded-lg hover:bg-neutral-800">Create New </a>
                 </div>
             </div>
         </form>

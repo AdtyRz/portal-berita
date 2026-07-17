@@ -10,14 +10,12 @@ return new class extends Migration
     {
         Schema::create('gallery_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('gallery_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('gallery_id')->constrained()->onDelete('cascade');
             $table->string('title')->nullable();
             $table->text('caption')->nullable();
             $table->string('image');
             $table->integer('order')->default(0);
             $table->timestamps();
-
-            $table->index(['gallery_id', 'order']);
         });
     }
 

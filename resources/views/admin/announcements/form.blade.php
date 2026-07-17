@@ -1,9 +1,12 @@
 @extends('admin.layouts.app')
 
-@section('content')
-@section('title', '{{ isset($announcement) ? 'Edit' : 'Create' }} Announcement')
+@section('title', isset($announcement) ? 'Edit Announcement' : 'Create Announcement')
 
-    <x-admin.page-header title="{{ isset($announcement) ? 'Edit' : 'Create' }} Announcement" description="Publish important announcements" />
+@section('content')
+    <x-admin.page-header 
+        title="{{ isset($announcement) ? 'Edit' : 'Create' }} Announcement" 
+        description="Publish important announcements" 
+    />
 
     <form method="POST" action="{{ isset($announcement) ? route('admin.announcements.update', $announcement) : route('admin.announcements.store') }}" enctype="multipart/form-data" class="space-y-6">
         @csrf
@@ -38,8 +41,8 @@
                         <h3 class="text-base font-semibold text-neutral-900">Publish</h3>
                         <x-admin.select label="Status" name="status" :options="['draft' => 'Draft', 'published' => 'Published', 'archived' => 'Archived']" :value="old('status', $announcement->status ?? 'draft')" required />
                         <x-admin.select label="Priority" name="priority" :options="['low' => 'Low', 'medium' => 'Medium', 'high' => 'High', 'urgent' => 'Urgent']" :value="old('priority', $announcement->priority ?? 'medium')" required />
-                        <x-admin.input label="Publish Date" name="publish_date" type="datetime-local" :value="old('publish_date', $announcement->publish_date?->format('Y-m-d\TH:i') ?? '')" />
-                        <x-admin.input label="Expired Date" name="expired_date" type="datetime-local" :value="old('expired_date', $announcement->expired_date?->format('Y-m-d\TH:i') ?? '')" />
+                        <x-admin.input label="Publish Date" name="publish_date" type="datetime-local" :value="old('publish_date', isset($announcement) && $announcement->publish_date ? $announcement->publish_date->format('Y-m-d\TH:i') : '')" />
+                        <x-admin.input label="Expired Date" name="expired_date" type="datetime-local" :value="old('expired_date', isset($announcement) && $announcement->expired_date ? $announcement->expired_date->format('Y-m-d\TH:i') : '')" />
                     </div>
                 </x-admin.card>
 
@@ -48,7 +51,7 @@
                         <h3 class="text-base font-semibold text-neutral-900">Thumbnail</h3>
                         @if(isset($announcement) && $announcement->thumbnail)
                             <div class="mb-3">
-                                <img src="{{ $announcement->thumbnail_url }}" alt="" class="w-full h-32 object-cover rounded-lg">
+                                <img src="{{ asset('storage/' . $announcement->thumbnail) }}" alt="" class="w-full h-32 object-cover rounded-lg">
                             </div>
                         @endif
                         <input type="file" name="thumbnail" accept="image/*" class="block w-full text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-neutral-100 file:text-neutral-700 hover:file:bg-neutral-200">

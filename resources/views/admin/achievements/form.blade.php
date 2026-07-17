@@ -1,9 +1,12 @@
 @extends('admin.layouts.app')
 
-@section('content')
-@section('title', '{{ isset($achievement) ? 'Edit' : 'Create' }} Achievement')
+@section('title', isset($achievement) ? 'Edit Achievement' : 'Create Achievement')
 
-    <x-admin.page-header title="{{ isset($achievement) ? 'Edit' : 'Create' }} Achievement" description="Record student achievements" />
+@section('content')
+    <x-admin.page-header 
+        title="{{ isset($achievement) ? 'Edit' : 'Create' }} Achievement" 
+        description="Record student achievements" 
+    />
 
     <form method="POST" action="{{ isset($achievement) ? route('admin.achievements.update', $achievement) : route('admin.achievements.store') }}" enctype="multipart/form-data" class="space-y-6">
         @csrf
@@ -42,7 +45,7 @@
                         <x-admin.input label="Achiever Name" name="achiever_name" :value="old('achiever_name', $achievement->achiever_name ?? '')" placeholder="Student name" />
                         <x-admin.input label="Competition Name" name="competition_name" :value="old('competition_name', $achievement->competition_name ?? '')" />
                         <x-admin.input label="Achievement Type" name="achievement_type" :value="old('achievement_type', $achievement->achievement_type ?? '')" />
-                        <x-admin.input label="Achievement Date" name="achievement_date" type="date" :value="old('achievement_date', $achievement->achievement_date?->format('Y-m-d') ?? '')" />
+                        <x-admin.input label="Achievement Date" name="achievement_date" type="date" :value="old('achievement_date', isset($achievement) && $achievement->achievement_date ? $achievement->achievement_date->format('Y-m-d') : '')" />
                     </div>
                 </x-admin.card>
 
@@ -51,7 +54,7 @@
                         <h3 class="text-base font-semibold text-neutral-900">Thumbnail</h3>
                         @if(isset($achievement) && $achievement->thumbnail)
                             <div class="mb-3">
-                                <img src="{{ $achievement->thumbnail_url }}" alt="" class="w-full h-32 object-cover rounded-lg">
+                                <img src="{{ asset('storage/' . $achievement->thumbnail) }}" alt="" class="w-full h-32 object-cover rounded-lg">
                             </div>
                         @endif
                         <input type="file" name="thumbnail" accept="image/*" class="block w-full text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-neutral-100 file:text-neutral-700 hover:file:bg-neutral-200">

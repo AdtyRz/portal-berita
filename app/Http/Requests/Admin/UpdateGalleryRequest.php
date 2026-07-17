@@ -15,6 +15,7 @@ class UpdateGalleryRequest extends FormRequest
             'description' => ['nullable', 'string', 'max:500'],
             'cover_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'images' => ['nullable', 'array'],
+            'display_mode' => ['required', 'in:grid,detailed'],
             'images.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'delete_items' => ['nullable', 'array'],
             'status' => ['required', 'in:draft,published,archived'],

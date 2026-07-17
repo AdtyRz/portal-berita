@@ -11,6 +11,8 @@ use App\Models\Document;
 use App\Models\Gallery;
 use App\Models\Organization;
 use App\Models\Post;
+use App\Models\Setting;
+use App\Models\SocialMedia;
 use App\Models\Video;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,8 +22,51 @@ class PageController extends Controller
 {
     public function about(): View
     {
+        // Ambil data dari Settings model
+        $settings = Setting::pluck('value', 'key')->toArray();
+
         $organizations = Organization::active()->ordered()->get();
-        return view('frontend.pages.about', compact('organizations'));
+
+        // Ambil social media
+        $socials = SocialMedia::where('status', 1)->get();
+
+        $organizations = Organization::active()->ordered()->get();
+
+        return view('frontend.pages.about', compact('organizations', 'settings', 'socials'));
+
+    }
+
+    public function organizationShow(string $slug): View
+    {
+        $organization = Organization::where('slug', $slug)
+            ->where('status', 1)
+            ->firstOrFail();
+
+        // Ambil organization lain untuk "More Members"
+        $otherOrganizations = Organization::where('status', 1)
+            ->where('id', '!=', $organization->id)
+            ->ordered()
+            ->take(4)
+            ->get();
+
+        // Prepare galleries data untuk JavaScript (hindari error @json)
+        $galleriesData = $organization->galleries->map(function ($g) {
+            return [
+                'id' => $g->id,
+                'title' => $g->title,
+                'description' => $g->description,
+                'image_url' => $g->image_url,
+                'event_date' => $g->event_date ? $g->event_date->format('M d, Y') : null,
+                'event_type' => $g->event_type,
+                'location' => $g->location,
+            ];
+        })->values();
+
+        return view('frontend.pages.organization-show', compact(
+            'organization',
+            'otherOrganizations',
+            'galleriesData'
+        ));
     }
 
     public function contact(): View
@@ -49,6 +94,7 @@ class PageController extends Controller
     public function gallery(): View
     {
         $galleries = Gallery::published()->withCount('items')->latest()->paginate(12);
+
         return view('frontend.pages.gallery', compact('galleries'));
     }
 
@@ -178,7 +224,7 @@ class PageController extends Controller
     {
         $document->incrementDownloads();
 
-        return response()->download(storage_path('app/public/' . $document->file));
+        return response()->download(storage_path('app/public/'.$document->file));
     }
 
     // Search
@@ -202,5 +248,26 @@ class PageController extends Controller
         }
 
         return view('frontend.pages.search', compact('query', 'results'));
+    }
+
+    // Gallery Show
+    public function galleryShow(string $slug): View
+    {
+        $gallery = Gallery::published()
+            ->with('items')
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $gallery->increment('total_views');
+
+        // Ambil gallery lain untuk "More Galleries"
+        $otherGalleries = Gallery::published()
+            ->where('id', '!=', $gallery->id)
+            ->withCount('items')
+            ->latest()
+            ->take(3)
+            ->get();
+
+        return view('frontend.pages.gallery-show', compact('gallery', 'otherGalleries'));
     }
 }

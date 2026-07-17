@@ -9,6 +9,7 @@ use App\Models\ActivityLog;
 use App\Models\Gallery;
 use App\Models\GalleryItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class GalleryController extends Controller
@@ -39,26 +40,45 @@ class GalleryController extends Controller
     {
         $data = $request->validated();
         $data['user_id'] = auth()->id();
+        $data['display_mode'] = $request->input('display_mode', 'grid');
 
         if ($request->hasFile('cover_image')) {
             $data['cover_image'] = $request->file('cover_image')->store('galleries', 'public');
         }
 
+        if ($data['status'] === 'published' && empty($data['publish_date'] ?? null)) {
+            $data['publish_date'] = now();
+        }
+
         $gallery = Gallery::create($data);
 
-        // Handle multiple images
+        // Handle multiple images upload
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $index => $image) {
                 $path = $image->store('gallery-items', 'public');
-                GalleryItem::create([
+
+                $itemData = [
                     'gallery_id' => $gallery->id,
                     'image' => $path,
                     'order' => $index,
-                ]);
+                ];
+
+                // Tambah title & caption jika mode detailed
+                if ($data['display_mode'] === 'detailed' && $request->has("captions.{$index}")) {
+                    $itemData['title'] = $request->input("captions.{$index}.title");
+                    $itemData['caption'] = $request->input("captions.{$index}.caption");
+                }
+
+                GalleryItem::create($itemData);
             }
         }
 
-        ActivityLog::log('created', $gallery, "Created gallery: {$gallery->title}");
+        // Set cover image otomatis jika kosong
+        if (! $gallery->cover_image && $gallery->items->count() > 0) {
+            $gallery->update(['cover_image' => $gallery->items->first()->image]);
+        }
+
+        Cache::forget('home_data_v1');
 
         return redirect()->route('admin.galleries.index')->with('success', 'Gallery created successfully.');
     }
@@ -66,12 +86,14 @@ class GalleryController extends Controller
     public function edit(Gallery $gallery)
     {
         $gallery->load('items');
+
         return view('admin.galleries.form', compact('gallery'));
     }
 
     public function update(UpdateGalleryRequest $request, Gallery $gallery)
     {
         $data = $request->validated();
+        $data['display_mode'] = $request->input('display_mode', $gallery->display_mode);
 
         if ($request->hasFile('cover_image')) {
             if ($gallery->cover_image) {
@@ -82,31 +104,39 @@ class GalleryController extends Controller
 
         $gallery->update($data);
 
-        // Handle new images
-        if ($request->hasFile('images')) {
-            $currentCount = $gallery->items()->count();
-            foreach ($request->file('images') as $index => $image) {
-                $path = $image->store('gallery-items', 'public');
-                GalleryItem::create([
-                    'gallery_id' => $gallery->id,
-                    'image' => $path,
-                    'order' => $currentCount + $index,
-                ]);
-            }
-        }
-
-        // Handle deleted items
+        // Delete selected items
         if ($request->has('delete_items')) {
             foreach ($request->delete_items as $itemId) {
                 $item = GalleryItem::find($itemId);
-                if ($item) {
+                if ($item && $item->gallery_id === $gallery->id) {
                     Storage::disk('public')->delete($item->image);
                     $item->delete();
                 }
             }
         }
 
-        ActivityLog::log('updated', $gallery, "Updated gallery: {$gallery->title}");
+        // Add new images
+        if ($request->hasFile('images')) {
+            $currentMaxOrder = $gallery->items()->max('order') ?? 0;
+            foreach ($request->file('images') as $index => $image) {
+                $path = $image->store('gallery-items', 'public');
+
+                $itemData = [
+                    'gallery_id' => $gallery->id,
+                    'image' => $path,
+                    'order' => $currentMaxOrder + $index + 1,
+                ];
+
+                if ($data['display_mode'] === 'detailed' && $request->has("captions.{$index}")) {
+                    $itemData['title'] = $request->input("captions.{$index}.title");
+                    $itemData['caption'] = $request->input("captions.{$index}.caption");
+                }
+
+                GalleryItem::create($itemData);
+            }
+        }
+
+        Cache::forget('home_data_v1');
 
         return redirect()->route('admin.galleries.index')->with('success', 'Gallery updated successfully.');
     }
