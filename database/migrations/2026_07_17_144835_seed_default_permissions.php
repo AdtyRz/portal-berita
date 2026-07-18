@@ -53,9 +53,9 @@ return new class extends Migration
         // Agar permission 100% realtime mengikuti UI "Manage Admins"
         $adminRole->syncPermissions([]);
 
-        echo "\n✅ Total permissions created: " . Permission::count() . "\n";
-        echo "✅ Super Admin permissions: " . $superAdminRole->permissions->count() . "\n";
-        echo "✅ Admin default permissions: " . $adminRole->permissions->count() . " (kosong, akan diatur via UI)\n\n";
+        // echo "\n✅ Total permissions created: " . Permission::count() . "\n";
+        // echo "✅ Super Admin permissions: " . $superAdminRole->permissions->count() . "\n";
+        // echo "✅ Admin default permissions: " . $adminRole->permissions->count() . " (kosong, akan diatur via UI)\n\n";
     }
 
     public function down(): void

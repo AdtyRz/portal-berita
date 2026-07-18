@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Contact;
 use App\Models\Gallery;
+use App\Models\OrganizationGallery;
 use App\Models\Organization;
 use App\Models\Post;
 use App\Models\Tag;
@@ -59,16 +60,12 @@ class DatabaseSeeder extends Seeder
 
         // Di method run(), tambahkan:
         $this->createOrganizationGalleries();
-
-        $this->command->info('✅ All data seeded successfully!');
     }
 
     private function createRolesAndPermissions(): void
     {
-        // Reset cached roles and permissions
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // 1. Definisikan SEMUA modul dan aksi yang diizinkan
         $modules = [
             'posts'            => ['view', 'create', 'edit', 'delete'],
             'categories'       => ['view', 'create', 'edit', 'delete'],
@@ -90,69 +87,18 @@ class DatabaseSeeder extends Seeder
             'manage-admins'    => ['view', 'edit', 'delete'],
         ];
 
-        // 2. Buat Permission ke Database (firstOrCreate agar tidak duplikat)
         foreach ($modules as $module => $actions) {
             foreach ($actions as $action) {
-                Permission::firstOrCreate(['name' => "{$action} {$module}"]);
+                Permission::firstOrCreate(['name' => "{$action} {$module}", 'guard_name' => 'web']);
             }
         }
 
-        // 3. Buat Roles
         $superAdminRole = Role::firstOrCreate(['name' => 'super-admin']);
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
-
-        // 4. Berikan SEMUA permission ke Super Admin
-        $superAdminRole->givePermissionTo(Permission::all());
-
-        // 5. Berikan permission default ke Admin Biasa (bisa diubah nanti via UI Manage Admins)
-        $adminDefaultPermissions = [
-            'view posts',
-            'create posts',
-            'edit posts',
-            'delete posts',
-            'view categories',
-            'create categories',
-            'edit categories',
-            'delete categories',
-            'view tags',
-            'create tags',
-            'edit tags',
-            'delete tags',
-            'view announcements',
-            'create announcements',
-            'edit announcements',
-            'delete announcements',
-            'view agendas',
-            'create agendas',
-            'edit agendas',
-            'delete agendas',
-            'view achievements',
-            'create achievements',
-            'edit achievements',
-            'delete achievements',
-            'view galleries',
-            'create galleries',
-            'edit galleries',
-            'delete galleries',
-            'view videos',
-            'create videos',
-            'edit videos',
-            'delete videos',
-            'view documents',
-            'create documents',
-            'edit documents',
-            'delete documents',
-            'view comments',
-            'approve comments',
-            'delete comments',
-            'view contacts',
-            'delete contacts',
-            'view settings',
-            'edit settings',
-        ];
-
-        // Sync permission agar admin punya permission default ini
-        $adminRole->syncPermissions($adminDefaultPermissions);
+        // Super Admin dapat semua permission
+        $superAdminRole->syncPermissions(Permission::all());
+        // Admin role KOSONG (0 permission) - akan diatur via UI
+        $adminRole->syncPermissions([]); // <-- PENTING: Kosongkan!
     }
 
     private function createUsers(): void
@@ -193,8 +139,6 @@ class DatabaseSeeder extends Seeder
                 ]
             );
         }
-
-        $this->command->info('   ✓ Users created');
     }
 
     private function createCategories(): Collection
@@ -212,8 +156,6 @@ class DatabaseSeeder extends Seeder
         foreach ($categories as $category) {
             Category::firstOrCreate(['slug' => $category['slug']], $category);
         }
-
-        $this->command->info('   ✓ Categories created');
 
         return Category::all();
     }
@@ -237,8 +179,6 @@ class DatabaseSeeder extends Seeder
             Tag::firstOrCreate(['slug' => $tag['slug']], $tag);
         }
 
-        $this->command->info('   ✓ Tags created');
-
         return Tag::all();
     }
 
@@ -254,8 +194,6 @@ class DatabaseSeeder extends Seeder
         foreach ($orgs as $org) {
             Organization::firstOrCreate(['slug' => $org['slug']], $org);
         }
-
-        $this->command->info('   ✓ Organizations created');
     }
 
     private function createPosts($categories, $tags): void
@@ -432,8 +370,8 @@ Ayo bergabung!',
                 'user_id' => $users->random()->id,
                 'category_id' => $categories->random()->id,
                 'title' => $title,
-                'slug' => Str::slug($title).'-'.($index + 1),
-                'excerpt' => 'Ini adalah excerpt untuk '.$title.'. Silakan baca selengkapnya.',
+                'slug' => Str::slug($title) . '-' . ($index + 1),
+                'excerpt' => 'Ini adalah excerpt untuk ' . $title . '. Silakan baca selengkapnya.',
                 'content' => "Ini adalah konten untuk {$title}.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                 'status' => 'published',
                 'featured' => false,
@@ -445,7 +383,6 @@ Ayo bergabung!',
             $post->tags()->attach($tags->random(rand(1, 2))->pluck('id')->toArray());
         }
 
-        $this->command->info('   ✓ Posts created (15 total)');
     }
 
     private function createComments(): void
@@ -465,15 +402,14 @@ Ayo bergabung!',
             Comment::create([
                 'post_id' => $posts->random()->id,
                 'user_id' => $users->random()->id,
-                'name' => 'User '.rand(1, 10),
-                'email' => 'user'.rand(1, 10).'@example.com',
+                'name' => 'User ' . rand(1, 10),
+                'email' => 'user' . rand(1, 10) . '@example.com',
                 'content' => $commentData['content'],
                 'is_approved' => $commentData['is_approved'],
                 'ip_address' => '127.0.0.1',
             ]);
         }
 
-        $this->command->info('   ✓ Comments created');
     }
 
     private function createAgendas(): void
@@ -529,59 +465,75 @@ Ayo bergabung!',
             ]));
         }
 
-        $this->command->info('   ✓ Agendas created (5 total)');
     }
 
     private function createAchievements(): void
     {
+        $users = User::role(['admin', 'super-admin'])->get();
+
         $achievements = [
             [
                 'title' => 'Juara 1 Olimpiade Matematika Nasional',
+                'slug' => 'juara-1-olimpiade-matematika-nasional',
                 'description' => 'Meraih juara 1 dalam Olimpiade Matematika Tingkat Nasional',
+                'content' => 'Selamat kepada Ahmad Rizki Pratama atas prestasinya.',
                 'achiever_name' => 'Ahmad Rizki Pratama',
-                'level' => 'national',
-                'rank' => 1,
-                'date' => now()->subDays(20),
+                'competition_name' => 'Olimpiade Matematika Nasional',
+                'level' => 'national',   // ✅ Valid ENUM
+                'rank' => '1st',         // ✅ Valid ENUM
+                'achievement_date' => now()->subDays(20),
                 'status' => 'published',
             ],
             [
                 'title' => 'Juara 2 Lomba Karya Ilmiah',
+                'slug' => 'juara-2-lomba-karya-ilmiah',
                 'description' => 'Meraih juara 2 dalam Lomba Karya Ilmiah Remaja',
+                'content' => 'Tim KIR sekolah berhasil meraih juara 2.',
                 'achiever_name' => 'Tim KIR Sekolah',
-                'level' => 'regional',
-                'rank' => 2,
-                'date' => now()->subDays(30),
+                'competition_name' => 'Lomba Karya Ilmiah Remaja',
+                'level' => 'province',   // ✅ Valid ENUM (bukan 'regional')
+                'rank' => '2nd',         // ✅ Valid ENUM
+                'achievement_date' => now()->subDays(30),
                 'status' => 'published',
             ],
             [
                 'title' => 'Juara 1 Lomba Basket',
+                'slug' => 'juara-1-lomba-basket',
                 'description' => 'Tim basket putra meraih juara 1',
+                'content' => 'Tim basket putra sekolah kami tampil dominan.',
                 'achiever_name' => 'Tim Basket Putra',
-                'level' => 'regional',
-                'rank' => 1,
-                'date' => now()->subDays(15),
+                'competition_name' => 'Turnamen Basket Antar SMA',
+                'level' => 'city',       // ✅ Valid ENUM
+                'rank' => '1st',         // ✅ Valid ENUM
+                'achievement_date' => now()->subDays(15),
                 'status' => 'published',
             ],
             [
                 'title' => 'Finalis Olimpiade Fisika',
+                'slug' => 'finalis-olimpiade-fisika',
                 'description' => 'Berhasil lolos ke babak final Olimpiade Fisika',
+                'content' => 'Dedi Kurniawan mewakili sekolah di tingkat nasional.',
                 'achiever_name' => 'Dedi Kurniawan',
+                'competition_name' => 'Olimpiade Fisika Nasional',
                 'level' => 'national',
-                'rank' => 5,
-                'date' => now()->subDays(60),
+                'rank' => 'honorable',   // ✅ Valid ENUM (bukan angka 5)
+                'achievement_date' => now()->subDays(60),
                 'status' => 'published',
             ],
         ];
 
         foreach ($achievements as $achievement) {
-            Achievement::create($achievement);
+            Achievement::create(array_merge($achievement, [
+                'user_id' => $users->random()->id,
+            ]));
         }
-
-        $this->command->info('   ✓ Achievements created (4 total)');
     }
 
     private function createAnnouncements(): void
     {
+        // Ambil user admin/super-admin secara acak untuk dijadikan pembuat pengumuman
+        $users = User::role(['admin', 'super-admin'])->get();
+
         $announcements = [
             [
                 'title' => 'Penerimaan Peserta Didik Baru 2026',
@@ -618,10 +570,11 @@ Ayo bergabung!',
         ];
 
         foreach ($announcements as $announcement) {
-            Announcement::create($announcement);
+            Announcement::create(array_merge($announcement, [
+                'user_id' => $users->random()->id, // <-- TAMBAHKAN user_id DI SINI
+            ]));
         }
 
-        $this->command->info('   ✓ Announcements created (4 total)');
     }
 
     private function createContacts(): void
@@ -657,7 +610,6 @@ Ayo bergabung!',
             Contact::create($contact);
         }
 
-        $this->command->info('   ✓ Contacts created (3 total)');
     }
 
     // Tambahkan method baru:
@@ -678,8 +630,8 @@ Ayo bergabung!',
                 OrganizationGallery::create([
                     'organization_id' => $org->id,
                     'title' => $this->generateGalleryTitle($org->name, $eventDate),
-                    'description' => 'Dokumentasi kegiatan '.$org->name.' pada '.$eventDate->format('d F Y'),
-                    'image' => null, // No image in seeder
+                    'description' => 'Dokumentasi kegiatan ' . $org->name . ' pada ' . $eventDate->format('d F Y'),
+                    'image' => 'dummy.jpg', // <-- UBAH DARI null MENJADI 'dummy.jpg'
                     'event_type' => $eventTypes[array_rand($eventTypes)],
                     'event_date' => $eventDate,
                     'location' => $locations[array_rand($locations)],
@@ -689,7 +641,6 @@ Ayo bergabung!',
             }
         }
 
-        $this->command->info('   ✓ Organization Galleries created');
     }
 
     private function generateGalleryTitle($orgName, $date): string
