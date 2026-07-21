@@ -63,10 +63,6 @@ class ManageAdminController extends Controller
 
     public function edit(User $user)
     {
-        if ($user->hasRole('super-admin')) {
-            return redirect()->route('admin.manage-admins.index')->with('error', 'Super Admin profile cannot be edited.');
-        }
-
         $roles = Role::where('name', 'admin')->get();
         $permissions = Permission::orderBy('name')->get()->groupBy(function ($item) {
             $name = str_replace(['.', '-'], ' ', $item->name);
@@ -80,15 +76,36 @@ class ManageAdminController extends Controller
         return view('admin.manage-admins.edit', compact('user', 'roles', 'permissions', 'userPermissions'));
     }
 
-    public function update(Request $request, User $user)
+        public function update(Request $request, User $user)
     {
+        // 1. Jika Super Admin, hanya izinkan update email & password
         if ($user->hasRole('super-admin')) {
-            return redirect()->route('admin.manage-admins.index')->with('error', 'Super Admin cannot be modified.');
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email,' . $user->id,
+                'password' => 'nullable|string|min:8|confirmed',
+            ]);
+
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+            ]);
+
+            // Update password only if provided
+            if ($request->filled('password')) {
+                $user->password = Hash::make($request->password);
+                $user->save();
+            }
+
+            return redirect()->route('admin.manage-admins.index')
+                ->with('success', 'Super Admin profile updated successfully.');
         }
 
+        // 2. Untuk Admin Biasa (normal flow)
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8|confirmed',
             'role' => 'required|exists:roles,name',
             'permissions' => 'nullable|array',
             'permissions.*' => 'exists:permissions,name'
@@ -99,13 +116,20 @@ class ManageAdminController extends Controller
             'email' => $request->email,
         ]);
 
+        // Update password only if provided
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+            $user->save();
+        }
+
         $user->syncRoles([$request->role]);
         $user->syncPermissions($request->permissions ?? []);
 
-        // Clear cache agar realtime
+        // Clear permission cache
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        return redirect()->route('admin.manage-admins.index')->with('success', 'Admin updated successfully.');
+        return redirect()->route('admin.manage-admins.index')
+            ->with('success', 'Admin updated successfully.');
     }
 
     public function destroy(User $user)
