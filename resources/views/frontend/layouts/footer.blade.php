@@ -1,4 +1,4 @@
-<footer class="bg-neutral-950 text-neutral-300 mt-20">
+<footer class="bg-neutral-950 text-neutral-300 ">
     {{-- Main Content --}}
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
@@ -126,11 +126,6 @@
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="text-xs text-neutral-500">
                 © {{ date('Y') }} {{ $schoolProfile->name ?? 'School Portal' }}. All rights reserved.
-            </div>
-            <div class="flex items-center gap-6 text-xs text-neutral-500">
-                <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
-                <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
-                <a href="#" class="hover:text-white transition-colors">Sitemap</a>
             </div>
         </div>
     </div>

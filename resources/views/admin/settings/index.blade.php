@@ -5,11 +5,6 @@
 @section('content')
     <x-admin.page-header title="School Settings" description="Manage school profile, contact info, and social media" />
 
-    @if(session('success'))
-        <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-sm text-emerald-800">
-            {{ session('success') }}
-        </div>
-    @endif
 
     <form method="POST" action="{{ route('admin.settings.update') }}" enctype="multipart/form-data" class="space-y-6">
         @csrf

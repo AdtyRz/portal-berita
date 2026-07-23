@@ -25,7 +25,7 @@
                 <x-admin.card>
                     <div class="p-6 space-y-4">
                         <h3 class="text-base font-semibold text-neutral-900">Video Source</h3>
-                        <x-admin.select label="Video Type" name="video_type" id="video_type" :options="['youtube' => 'YouTube', 'vimeo' => 'Vimeo', 'upload' => 'Upload File']" :value="old('video_type', $video->video_type ?? 'youtube')" required />
+                        <x-admin.select label="Video Type" name="video_type" id="video_type" :options="['youtube' => 'YouTube', 'upload' => 'Upload File']" :value="old('video_type', $video->video_type ?? 'youtube')" required />
                         
                         <div id="url_field">
                             <x-admin.input label="Video URL" name="video_url" :value="old('video_url', $video->video_url ?? '')" placeholder="https://youtube.com/watch?v=..." help="Paste YouTube or Vimeo URL" />

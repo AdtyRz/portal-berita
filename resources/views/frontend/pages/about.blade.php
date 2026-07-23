@@ -91,35 +91,6 @@
     </section>
     @endif
 
-    {{-- Stats --}}
-    <section class="py-20 bg-gradient-to-br from-neutral-900 to-neutral-800 text-white">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold" style="font-family: var(--font-heading);">Our Impact</h2>
-            </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div class="text-center">
-                    <div class="text-4xl md:text-5xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">500+</div>
-                    <div class="text-sm text-neutral-300">Students</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-4xl md:text-5xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-orange-400">50+</div>
-                    <div class="text-sm text-neutral-300">Teachers</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-4xl md:text-5xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">100+</div>
-                    <div class="text-sm text-neutral-300">Achievements</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-4xl md:text-5xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-green-400">
-                        {{ $schoolProfile->founded_year ? (date('Y') - $schoolProfile->founded_year) . '+' : '25+' }}
-                    </div>
-                    <div class="text-sm text-neutral-300">Years Experience</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     {{-- Principal --}}
     @if($schoolProfile->principal_name)
     <section class="py-20">
@@ -144,22 +115,4 @@
         </div>
     </section>
     @endif
-
-    {{-- Contact CTA --}}
-    <section class="py-20 bg-gradient-to-br from-blue-600 to-purple-600 text-white">
-        <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4" style="font-family: var(--font-heading);">Get in Touch</h2>
-            <p class="text-lg text-blue-100 mb-8">Have questions? We'd love to hear from you.</p>
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="{{ route('frontend.contact') }}" class="px-8 py-4 bg-white text-blue-600 font-semibold rounded-xl hover:bg-neutral-100 transition-all shadow-xl">
-                    Contact Us
-                </a>
-                @if($schoolProfile->email)
-                    <a href="mailto:{{ $schoolProfile->email }}" class="px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-semibold rounded-xl hover:bg-white/20 transition-all">
-                        {{ $schoolProfile->email }}
-                    </a>
-                @endif
-            </div>
-        </div>
-    </section>
 @endsection
