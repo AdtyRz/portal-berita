@@ -180,8 +180,8 @@
     </div>
 </header>
 
-{{-- Spacer untuk fixed header --}}
-<div class="h-32 md:h-24"></div>
+<!-- {{-- Spacer untuk fixed header --}}
+<div class="h-32 md:h-24"></div> -->
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

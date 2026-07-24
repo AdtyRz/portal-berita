@@ -7,48 +7,50 @@
         $schoolProfile = \App\Models\SchoolProfile::first();
         $siteName = $schoolProfile->name ?? 'School Portal';
         $siteTagline = $schoolProfile->tagline ?? 'Excellence in Education';
-    @endphp
+    @endphp  
     
-
-    {{-- 1. HERO SLIDER --}}
-    @if(isset($heroSliders) && $heroSliders->count() > 0)
-    <section class="relative bg-gradient-to-b from-neutral-1000 via-neutral-800 to-black">
-        <div class="swiper mySwiper h-[400px] md:h-[500px] lg:h-[600px]">
-            <div class="swiper-wrapper">
-                @foreach($heroSliders as $slider)
-                    <div class="swiper-slide relative">
-                        <img src="{{ $slider->image_url }}" alt="{{ $slider->title }}" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 right-0 p-6 md:p-12 lg:p-16">
-                            <div class="mx-auto max-w-7xl">
-                                <div class="max-w-3xl">
-                                    <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-xs font-bold rounded-full mb-3">FEATURED</span>
-                                    <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 leading-tight" style="font-family: var(--font-heading);">
-                                        {{ $slider->title }}
-                                    </h1>
-                                    @if($slider->description)
-                                        <p class="text-sm md:text-base text-neutral-200 mb-4 line-clamp-2">
-                                            {{ $slider->description }}
-                                        </p>
-                                    @endif
-                                    @if($slider->button_text && $slider->button_url)
-                                        <a href="{{ $slider->button_url }}" class="inline-flex items-center px-6 py-2.5 bg-white text-neutral-900 font-semibold rounded-lg hover:bg-neutral-100 transition-all shadow-lg">
-                                            {{ $slider->button_text }}
-                                            <svg class="ml-2 w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                            </svg>
-                                        </a>
-                                    @endif
-                                </div>
+   {{-- Hero Slider Section (Dengan Gradasi Hitam → Putih) --}}
+@if(isset($heroSliders) && $heroSliders->count() > 0)
+<section class="relative bg-gradient-to-b from-neutral-800 via-neutral-900 to-white">
+    {{-- Spacer untuk fixed header (supaya slider tidak tertutup header) --}}
+    <div class="h-32 md:h-24"></div>
+    
+    <div class="swiper mySwiper h-[400px] md:h-[500px] lg:h-[600px]">
+        <div class="swiper-wrapper">
+            @foreach($heroSliders as $slider)
+                <div class="swiper-slide relative">
+                    <img src="{{ $slider->image_url }}" alt="{{ $slider->title }}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 md:p-12 lg:p-16">
+                        <div class="mx-auto max-w-7xl">
+                            <div class="max-w-3xl">
+                                <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-xs font-bold rounded-full mb-3">FEATURED</span>
+                                <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 leading-tight" style="font-family: var(--font-heading);">
+                                    {{ $slider->title }}
+                                </h1>
+                                @if($slider->description)
+                                    <p class="text-sm md:text-base text-neutral-200 mb-4 line-clamp-2">
+                                        {{ $slider->description }}
+                                    </p>
+                                @endif
+                                @if($slider->button_text && $slider->button_url)
+                                    <a href="{{ $slider->button_url }}" class="inline-flex items-center px-6 py-2.5 bg-white text-neutral-900 font-semibold rounded-lg hover:bg-neutral-100 transition-all shadow-lg">
+                                        {{ $slider->button_text }}
+                                        <svg class="ml-2 w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </div>
-                @endforeach
-            </div>
-            <div class="swiper-pagination"></div>
+                </div>
+            @endforeach
         </div>
-    </section>
-    @endif
+        <div class="swiper-pagination"></div>
+    </div>
+</section>
+@endif
 
     {{-- 2. BREAKING NEWS (Merah) --}}
     @if(isset($breakingNews) && $breakingNews->count() > 0)
