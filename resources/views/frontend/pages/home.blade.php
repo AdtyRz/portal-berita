@@ -7,14 +7,12 @@
         $schoolProfile = \App\Models\SchoolProfile::first();
         $siteName = $schoolProfile->name ?? 'School Portal';
         $siteTagline = $schoolProfile->tagline ?? 'Excellence in Education';
-    @endphp  
-    
-   {{-- Hero Slider Section (Dengan Gradasi Hitam → Putih) --}}
+    @endphp
+
+<div class="bg-gradient-to-t from-neutral-950 via-neutral-000 to-white h-32 md:h-24"></div>
+   {{-- Hero Slider Section --}}
 @if(isset($heroSliders) && $heroSliders->count() > 0)
-<section class="relative bg-gradient-to-b from-neutral-800 via-neutral-900 to-white">
-    {{-- Spacer untuk fixed header (supaya slider tidak tertutup header) --}}
-    <div class="h-32 md:h-24"></div>
-    
+<section class="relative bg-gradient-to-b from-neutral-800 via-neutral-900 to-white -mt-32 md:-mt-24">
     <div class="swiper mySwiper h-[400px] md:h-[500px] lg:h-[600px]">
         <div class="swiper-wrapper">
             @foreach($heroSliders as $slider)
@@ -48,6 +46,56 @@
             @endforeach
         </div>
         <div class="swiper-pagination"></div>
+    </div>
+</section>
+
+@else
+{{-- Fallback: Default Hero Section (jika tidak ada slider) --}}
+<section class="relative bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 text-white overflow-hidden">
+    {{-- Animated Background --}}
+    <div class="absolute inset-0 opacity-20">
+        <div class="absolute top-0 -left-4 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
+        <div class="absolute top-0 -right-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse" style="animation-delay: 2s;"></div>
+        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse" style="animation-delay: 4s;"></div>
+    </div>
+
+    <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24">
+        <div class="text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight" style="font-family: var(--font-heading);">
+                Welcome to <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">{{ $siteName }}</span>
+            </h1>
+            <p class="text-xl text-neutral-300 max-w-2xl mx-auto mb-8">{{ $siteTagline }}</p>
+
+            {{-- Quick Stats --}}
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-12">
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all cursor-pointer" onclick="window.location='{{ route('frontend.posts.index') }}'">
+                    <div class="text-3xl font-bold mb-1">{{ $latestPosts->count() }}+</div>
+                    <div class="text-sm text-neutral-300">News Articles</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all cursor-pointer" onclick="window.location='{{ route('frontend.announcements.index') }}'">
+                    <div class="text-3xl font-bold mb-1">{{ $latestAnnouncements->count() }}+</div>
+                    <div class="text-sm text-neutral-300">Announcements</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all cursor-pointer" onclick="window.location='{{ route('frontend.agendas.index') }}'">
+                    <div class="text-3xl font-bold mb-1">{{ $upcomingAgendas->count() }}+</div>
+                    <div class="text-sm text-neutral-300">Upcoming Events</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all cursor-pointer" onclick="window.location='{{ route('frontend.achievements.index') }}'">
+                    <div class="text-3xl font-bold mb-1">{{ $latestAchievements->count() }}+</div>
+                    <div class="text-sm text-neutral-300">Achievements</div>
+                </div>
+            </div>
+
+            {{-- CTA Buttons --}}
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="{{ route('frontend.posts.index') }}" class="px-8 py-4 bg-white text-neutral-900 font-semibold rounded-xl hover:bg-neutral-100 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                    Read Latest News
+                </a>
+                <a href="{{ route('frontend.about') }}" class="px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-semibold rounded-xl hover:bg-white/20 transition-all">
+                    Learn More
+                </a>
+            </div>
+        </div>
     </div>
 </section>
 @endif
@@ -242,7 +290,7 @@
             </div>
         </div>
     </section>
-    <div class="bg-gradient-to-t from-neutral-950 via-neutral-000 to-white py-16"></div>
+    {{-- <div class="bg-gradient-to-t from-neutral-950 via-neutral-000 to-white py-16"></div> --}}
 @endsection
 
 @push('scripts')

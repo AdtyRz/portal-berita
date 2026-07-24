@@ -1,3 +1,4 @@
+<div class="bg-gradient-to-t from-neutral-950 via-neutral-000 to-white py-16"></div>
 <footer class="bg-neutral-950 text-neutral-300 ">
     {{-- Main Content --}}
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">

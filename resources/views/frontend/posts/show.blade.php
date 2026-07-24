@@ -3,6 +3,8 @@
 @section('title', $post->meta_title ?? $post->title)
 
 @section('content')
+
+<div class="h-32 md:h-24"></div>
     <article class="py-16">
         <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
             {{-- Header --}}
@@ -191,4 +193,5 @@
             @endif
         </div>
     </article>
+    <div class="bg-gradient-to-t from-neutral-950 via-neutral-000 to-white py-16"></div>
 @endsection

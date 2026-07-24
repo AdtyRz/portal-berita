@@ -10,7 +10,7 @@
     class="fixed top-0 left-0 right-0 z-50 px-4 sm:px-4 lg:px-4 py-4 transition-all duration-300 ease-in-out"
     x-data="{ mobileOpen: false, scrolled: false }">
     <div class="mx-auto max-w-8xl">
-        <div class="bg-white/40 backdrop-blur-xl border border-white/30 rounded-2xl shadow-lg shadow-neutral-900/5">
+        <div class="bg-white/60 backdrop-blur-xl border border-white/30 rounded-2xl shadow-lg shadow-neutral-900/5">
 
             {{-- DESKTOP: Logo + Navigation --}}
             <div class="hidden md:flex items-center justify-between h-16 px-6">
@@ -180,8 +180,8 @@
     </div>
 </header>
 
-<!-- {{-- Spacer untuk fixed header --}}
-<div class="h-32 md:h-24"></div> -->
+{{-- Spacer untuk fixed header --}}
+{{-- <div class="h-32 md:h-24"></div> --}}
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

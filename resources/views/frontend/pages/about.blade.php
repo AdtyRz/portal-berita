@@ -4,8 +4,11 @@
 @section('metaDescription', $schoolProfile->description ?? 'Learn more about our school')
 
 @section('content')
+
+<div class="bg-neutral-900 h-32 md:h-24"></div>
+
     {{-- Hero Section --}}
-    <section class="relative bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 text-white py-24 overflow-hidden">
+    <section class="relative bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 text-white py-20 overflow-hidden">
         @if($schoolProfile->cover_image)
             <img src="{{ $schoolProfile->cover_url }}" alt="" class="absolute inset-0 w-full h-full object-cover opacity-30">
         @endif
@@ -14,7 +17,7 @@
             <div class="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
             <div class="absolute top-0 -right-4 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse" style="animation-delay: 2s;"></div>
         </div>
-        
+
         <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
             <span class="text-xs font-bold text-red-400 uppercase tracking-wider">About Our School</span>
             <h1 class="text-4xl md:text-6xl font-bold mt-2 mb-4" style="font-family: var(--font-heading);">
@@ -104,7 +107,7 @@
     <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
         <span class="text-xs font-bold text-red-600 uppercase tracking-wider">Pesan Dari</span>
         <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mt-2 mb-8" style="font-family: var(--font-heading);">Kepala Sekolah</h2>
-        
+
         <div class="bg-white dark:bg-neutral-800 rounded-2xl p-8 md:p-12 shadow-lg border border-neutral-200 dark:border-neutral-700">
             {{-- Foto Kepala Sekolah --}}
             <div class="w-24 h-24 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4 overflow-hidden">
@@ -114,10 +117,10 @@
                     {{ strtoupper(substr($pName, 0, 1)) }}
                 @endif
             </div>
-            
+
             <h3 class="text-2xl font-bold text-neutral-900 dark:text-white mb-2" style="font-family: var(--font-heading);">{{ $pName }}</h3>
             <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">Kepala Sekolah {{ $schoolProfile->name ?? 'Sekolah' }}</p>
-            
+
             <div class="relative">
                 <svg class="absolute -top-4 -left-4 w-8 h-8 text-neutral-200 dark:text-neutral-700" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>

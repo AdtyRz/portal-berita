@@ -2,15 +2,13 @@
 
 @section('content')
 @section('title', 'Achievements')
-
-
-
-    <section class="bg-neutral-900 text-white py-20">
+<div class="bg-neutral-200 h-32 md:h-26"></div>
+    <section class="bg-gradient-to-b from-neutral-200 via-neutral-000 to-white relative">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl">
                 <span class="text-xs font-bold text-yellow-400 uppercase tracking-wider">Celebrating Excellence</span>
                 <h1 class="text-4xl md:text-5xl font-bold mt-2 mb-4" style="font-family: var(--font-heading);">Achievements</h1>
-                <p class="text-xl text-neutral-300">Outstanding accomplishments from our students and staff.</p>
+                <p class="text-xl text-neutral-900">Outstanding accomplishments from our students and staff.</p>
             </div>
         </div>
     </section>

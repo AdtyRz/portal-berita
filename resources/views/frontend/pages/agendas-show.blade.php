@@ -3,8 +3,7 @@
 @section('content')
 @section('title', '{{ $agenda->title }}')
 
-
-
+<div class="h-32 md:h-24"></div>
     <article class="py-12">
         <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
             <nav class="flex items-center gap-2 text-sm text-neutral-500 mb-8">

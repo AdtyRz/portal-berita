@@ -3,6 +3,7 @@
 @section('title', 'Contact Us')
 
 @section('content')
+<div class="h-32 md:h-24"></div>
     <section class="py-16">
         <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
             <h1 class="text-4xl font-bold text-neutral-900 mb-6" style="font-family: var(--font-heading);">Contact Us</h1>

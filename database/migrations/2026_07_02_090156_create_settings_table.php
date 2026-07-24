@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('group')->default('general');
             $table->text('description')->nullable();
             $table->timestamps();
-
             $table->index(['group', 'key']);
         });
     }

@@ -3,9 +3,8 @@
 @section('content')
 @section('title', 'Announcements')
 
-
-
-    <section class="bg-neutral-50 border-b border-neutral-200">
+    <div class="bg-neutral-200 h-32 md:h-24"></div>
+    <section class="bg-gradient-to-b from-neutral-200 via-neutral-000 to-white relative">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
             <div class="max-w-3xl">
                 <span class="text-xs font-bold text-red-600 uppercase tracking-wider">Stay Informed</span>
