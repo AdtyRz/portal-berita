@@ -128,7 +128,11 @@ Route::middleware(['auth', 'verified', 'active', 'admin.permission'])->prefix('a
     Route::get('contacts', [ContactController::class, 'index'])->name('contacts.index');
     Route::get('contacts/{contact}', [ContactController::class, 'show'])->name('contacts.show');
     Route::delete('contacts/{contact}', [ContactController::class, 'destroy'])->name('contacts.destroy');
-
+ 
+    // School Settings
+    Route::get('/admin/settings', [App\Http\Controllers\Admin\SettingController::class, 'index'])->name('admin.settings.index');
+    Route::put('/admin/settings', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('admin.settings.update');
+    
     // 7. Super Admin Only Routes (Poin 15)
     Route::middleware(['role:super-admin'])->group(function () {
         Route::resource('users', UserController::class);
@@ -145,6 +149,7 @@ Route::middleware(['auth', 'verified', 'active', 'admin.permission'])->prefix('a
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
         Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
         Route::get('activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
+
     });
 });
 

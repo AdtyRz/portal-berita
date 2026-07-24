@@ -108,16 +108,6 @@
                     @endif
                 </ul>
             </div>
-
-            {{-- Newsletter --}}
-            <div>
-                <h4 class="font-bold text-white mb-5 text-sm tracking-wider uppercase">Stay Updated</h4>
-                <p class="text-sm text-neutral-400 mb-4">Subscribe to our newsletter for the latest news.</p>
-                <form class="space-y-2">
-                    <input type="email" placeholder="Enter your email" class="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:border-white/30">
-                    <button type="submit" class="w-full px-4 py-2.5 bg-white text-neutral-900 font-semibold text-sm rounded-lg hover:bg-neutral-100 transition-all">Subscribe</button>
-                </form>
-            </div>
         </div>
     </div>
 

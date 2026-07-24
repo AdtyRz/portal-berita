@@ -17,10 +17,11 @@ class HomeController extends Controller
 {
     public function index(): View
     {
-        // Cache 1 jam (3600 detik)
+        // Ambil semua data sekaligus dari cache agar efisien
         $data = Cache::remember('home_data_v1', 3600, function () {
             return [
-                'heroSliders' => HeroSlider::active()->ordered()->get(),
+                'heroSliders' => HeroSlider::active()->orderBy('order')->get(),
+                'banners' => \App\Models\Banner::active()->orderBy('order')->get(),
                 'breakingNews' => Post::published()->breakingNews()->latest()->take(5)->get(),
                 'featuredPosts' => Post::published()->featured()->latest()->take(4)->get(),
                 'latestPosts' => Post::published()->with('category', 'author')->latest()->take(8)->get(),

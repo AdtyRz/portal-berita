@@ -32,7 +32,11 @@
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700|plus-jakarta-sans:500,600,700,800"
         rel="stylesheet" />
 
+    {{-- Vite Assets --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    {{-- Swiper CSS CDN --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
     <style>
         :root {
@@ -42,6 +46,14 @@
 
         body {
             font-family: var(--font-body);
+        }
+
+        /* Swiper Slide Animation */
+        .swiper-slide {
+            transition: transform 0.6s ease-in-out;
+        }
+        .swiper-slide-active {
+            transform: scale(1.02);
         }
 
         .fade-up {
@@ -115,6 +127,9 @@
         });
     </script>
 
+    {{-- Swiper JS CDN --}}
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    
     @stack('scripts')
 </body>
 

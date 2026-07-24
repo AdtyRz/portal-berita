@@ -91,28 +91,43 @@
     </section>
     @endif
 
-    {{-- Principal --}}
-    @if($schoolProfile->principal_name)
-    <section class="py-20">
-        <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-            <span class="text-xs font-bold text-red-600 uppercase tracking-wider">Message from</span>
-            <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 mt-2 mb-8" style="font-family: var(--font-heading);">Our Principal</h2>
-            <div class="bg-white rounded-2xl p-8 md:p-12 shadow-lg border border-neutral-200">
-                <div class="w-24 h-24 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4">
-                    {{ strtoupper(substr($schoolProfile->principal_name, 0, 1)) }}
-                </div>
-                <h3 class="text-2xl font-bold text-neutral-900 mb-2" style="font-family: var(--font-heading);">{{ $schoolProfile->principal_name }}</h3>
-                <p class="text-sm text-neutral-500 mb-6">Principal of {{ $schoolProfile->name }}</p>
-                <div class="relative">
-                    <svg class="absolute -top-4 -left-4 w-8 h-8 text-neutral-200" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-                    </svg>
-                    <p class="text-lg text-neutral-700 italic leading-relaxed pl-6">
-                        "Welcome to {{ $schoolProfile->name }}. We are committed to providing quality education and fostering excellence in every student who walks through our doors."
-                    </p>
-                </div>
+{{-- Principal Section --}}
+@php
+    // Ambil data dari Setting, fallback ke SchoolProfile jika belum di-set
+    $pName = \App\Models\Setting::get('principal_name', $schoolProfile->principal_name ?? 'Kepala Sekolah');
+    $pMsg = \App\Models\Setting::get('principal_message', 'Selamat datang di ' . ($schoolProfile->name ?? 'sekolah kami') . '. Kami berkomitmen untuk memberikan pendidikan berkualitas dan membina keunggulan pada setiap siswa.');
+    $pPhoto = \App\Models\Setting::get('principal_photo') ?? $schoolProfile->principal_photo;
+@endphp
+
+@if($pName !== 'Kepala Sekolah' || $pMsg)
+<section class="py-20 bg-neutral-50 dark:bg-neutral-900">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+        <span class="text-xs font-bold text-red-600 uppercase tracking-wider">Pesan Dari</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mt-2 mb-8" style="font-family: var(--font-heading);">Kepala Sekolah</h2>
+        
+        <div class="bg-white dark:bg-neutral-800 rounded-2xl p-8 md:p-12 shadow-lg border border-neutral-200 dark:border-neutral-700">
+            {{-- Foto Kepala Sekolah --}}
+            <div class="w-24 h-24 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4 overflow-hidden">
+                @if($pPhoto)
+                    <img src="{{ filter_var($pPhoto, FILTER_VALIDATE_URL) ? $pPhoto : asset('storage/' . $pPhoto) }}" alt="{{ $pName }}" class="w-full h-full object-cover">
+                @else
+                    {{ strtoupper(substr($pName, 0, 1)) }}
+                @endif
+            </div>
+            
+            <h3 class="text-2xl font-bold text-neutral-900 dark:text-white mb-2" style="font-family: var(--font-heading);">{{ $pName }}</h3>
+            <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6">Kepala Sekolah {{ $schoolProfile->name ?? 'Sekolah' }}</p>
+            
+            <div class="relative">
+                <svg class="absolute -top-4 -left-4 w-8 h-8 text-neutral-200 dark:text-neutral-700" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+                </svg>
+                <p class="text-lg text-neutral-700 dark:text-neutral-300 italic leading-relaxed pl-6 text-left md:text-center">
+                    "{{ $pMsg }}"
+                </p>
             </div>
         </div>
-    </section>
-    @endif
+    </div>
+</section>
+@endif
 @endsection
