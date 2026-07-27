@@ -5,7 +5,7 @@
 
 @section('content')
 
-<div class="bg-neutral-900 h-32 md:h-24"></div>
+<div class="bg-gradient-to-t from-neutral-500 via-neutral-200 to-white h-32 md:h-24"></div>
 
     {{-- Hero Section --}}
     <section class="relative bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 text-white py-20 overflow-hidden">
@@ -40,10 +40,11 @@
             @endif
         </div>
     </section>
+    <div class="bg-gradient-to-b from-neutral-500 via-neutral-300 to-white h-32 md:h-24"></div>
 
     {{-- Description --}}
     @if($schoolProfile->description)
-    <section class="py-20">
+    <section class="">
         <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
             <div class="prose prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight">
                 <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 text-center mb-8" style="font-family: var(--font-heading);">Who We Are</h2>
@@ -55,7 +56,7 @@
 
     {{-- Vision & Mission --}}
     @if($schoolProfile->vision || count($schoolProfile->mission_list) > 0)
-    <section class="py-20 bg-neutral-50">
+    <section class="py-20 bg-neutral-000">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 @if($schoolProfile->vision)
@@ -103,7 +104,7 @@
 @endphp
 
 @if($pName !== 'Kepala Sekolah' || $pMsg)
-<section class="py-20 bg-neutral-50 dark:bg-neutral-900">
+<section class="py-20 bg-neutral-000 dark:bg-neutral-900">
     <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
         <span class="text-xs font-bold text-red-600 uppercase tracking-wider">Pesan Dari</span>
         <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mt-2 mb-8" style="font-family: var(--font-heading);">Kepala Sekolah</h2>

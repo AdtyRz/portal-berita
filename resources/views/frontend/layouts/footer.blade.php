@@ -1,5 +1,5 @@
-<div class="bg-gradient-to-t from-neutral-950 via-neutral-000 to-white py-16"></div>
-<footer class="bg-neutral-950 text-neutral-300 ">
+<div class="bg-gradient-to-t from-stone-900 via-stone-000 to-stone-100 py-16"></div>
+<footer class="bg-neutral-900 text-neutral-300 ">
     {{-- Main Content --}}
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
@@ -64,7 +64,7 @@
                     <li><a href="{{ route('home') }}" class="text-neutral-400 hover:text-white transition-colors">Home</a></li>
                     <li><a href="{{ route('frontend.posts.index') }}" class="text-neutral-400 hover:text-white transition-colors">News & Articles</a></li>
                     <li><a href="{{ route('frontend.about') }}" class="text-neutral-400 hover:text-white transition-colors">About Us</a></li>
-                    <li><a href="{{ route('frontend.gallery') }}" class="text-neutral-400 hover:text-white transition-colors">Gallery</a></li>
+                    <!-- <li><a href="{{ route('frontend.gallery') }}" class="text-neutral-400 hover:text-white transition-colors">Gallery</a></li> -->
                     <li><a href="{{ route('frontend.announcements.index') }}" class="text-neutral-400 hover:text-white transition-colors">Announcements</a></li>
                     <li><a href="{{ route('frontend.contact') }}" class="text-neutral-400 hover:text-white transition-colors">Contact Us</a></li>
                 </ul>

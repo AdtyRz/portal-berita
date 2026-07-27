@@ -55,4 +55,6 @@ class Achievement extends Model
     {
         return $this->thumbnail ? asset('storage/' . $this->thumbnail) : asset('images/default-achievement.jpg');
     }
+
+    
 }

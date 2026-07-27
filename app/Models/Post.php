@@ -64,9 +64,6 @@ class Post extends Model
         return $this->morphMany(Reaction::class, 'reactable');
     }
 
-    /**
-     * Scope a query to only include published posts
-     */
     public function scopePublished($query)
     {
         return $query->where('status', 'published')
@@ -118,9 +115,6 @@ class Post extends Model
         return $this->thumbnail ? asset('storage/'.$this->thumbnail) : asset('images/default-post.jpg');
     }
 
-    /**
-     * Increment view count
-     */
     public function incrementViews(int $amount = 1): void
     {
         $this->increment('total_views', $amount);
