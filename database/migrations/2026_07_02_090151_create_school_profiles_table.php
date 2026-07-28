@@ -23,15 +23,26 @@ return new class extends Migration
             $table->year('founded_year')->nullable();
             $table->string('accreditation')->nullable();
             $table->string('principal_name')->nullable();
+            
+            // Social Media Links
             $table->string('facebook')->nullable();
             $table->string('instagram')->nullable();
             $table->string('twitter')->nullable();
             $table->string('youtube')->nullable();
             $table->string('linkedin')->nullable();
             $table->string('tiktok')->nullable();
+            
+            // Social Media Embed Codes
+            $table->text('instagram_embed')->nullable();
+            $table->text('tiktok_embed')->nullable();
+            $table->text('youtube_embed')->nullable();
+            $table->text('facebook_embed')->nullable();
+            
+            // Branding
             $table->string('logo')->nullable();
             $table->string('favicon')->nullable();
             $table->string('cover_image')->nullable();
+            
             $table->timestamps();
         });
     }

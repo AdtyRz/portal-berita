@@ -31,12 +31,23 @@ class SettingController extends Controller
             'website' => ['nullable', 'url', 'max:255'],
             'founded_year' => ['nullable', 'integer', 'min:1900', 'max:' . date('Y')],
             'accreditation' => ['nullable', 'string', 'max:50'],
+            
+            // Social Media Links
             'facebook' => ['nullable', 'url', 'max:255'],
             'instagram' => ['nullable', 'url', 'max:255'],
             'twitter' => ['nullable', 'url', 'max:255'],
             'youtube' => ['nullable', 'url', 'max:255'],
             'linkedin' => ['nullable', 'url', 'max:255'],
             'tiktok' => ['nullable', 'url', 'max:255'],
+            
+            // Social Media Embed Codes
+            'instagram_embed' => ['nullable', 'string'],
+            'tiktok_embed' => ['nullable', 'string'],
+            'youtube_embed' => ['nullable', 'string'],
+            'facebook_embed' => ['nullable', 'string'],
+            'twitter_embed' => ['nullable', 'string'],
+            
+            // Branding
             'logo' => ['nullable', 'image', 'max:2048'],
             'favicon' => ['nullable', 'image', 'max:1024'],
             'cover_image' => ['nullable', 'image', 'max:5120'],
@@ -48,6 +59,7 @@ class SettingController extends Controller
 
         $profile = SchoolProfile::getCurrent();
 
+        // Handle file uploads
         if ($request->hasFile('logo')) {
             if ($profile->logo) Storage::disk('public')->delete($profile->logo);
             $validated['logo'] = $request->file('logo')->store('school', 'public');
@@ -73,13 +85,17 @@ class SettingController extends Controller
             Setting::set('principal_photo', $photoPath, 'image', 'school_profile');
         }
 
+        // Handle principal settings
         Setting::set('principal_name', $request->principal_name ?? '', 'text', 'school_profile');
         Setting::set('principal_message', $request->principal_message ?? '', 'textarea', 'school_profile');
 
+        // Remove fields that are handled separately
         unset($validated['principal_name'], $validated['principal_message'], $validated['principal_photo']);
 
+        // Update profile
         $profile->update($validated);
 
+        // Clear cache
         SchoolProfile::clearCache();
         Setting::clearCache();
 

@@ -4,8 +4,9 @@
 
 @section('content')
 
-<div class="h-32 md:h-24"></div>
-    <article class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+<div class="bg-gradient-to-b from-stone-500 via-stone-200 to-stone-200 h-32 md:h-24 h-32 md:h-24"></div>
+<div class="bg-stone-200">
+    <article class="bg-stone-200 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
         <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
             {{-- Header --}}
             <header class="mb-8">
@@ -21,7 +22,7 @@
                 <div class="flex items-center gap-4 text-sm text-neutral-500">
                     <div class="flex items-center gap-2">
                         <div
-                            class="w-10 h-10 rounded-full bg-neutral-200 flex items-center justify-center text-sm font-semibold text-neutral-600">
+                            class="w-10 h-10 rounded-full bg-neutral-50 flex items-center justify-center text-sm font-semibold text-neutral-600">
                             {{ strtoupper(substr($post->author->name, 0, 1)) }}
                         </div>
                         <div>
@@ -194,3 +195,4 @@
         </div>
     </article>
 @endsection
+</div>

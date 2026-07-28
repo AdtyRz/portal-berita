@@ -1,4 +1,4 @@
-<div class="bg-gradient-to-t from-stone-900 via-stone-000 to-stone-100 py-16"></div>
+<div class="bg-gradient-to-t from-stone-900 via-stone-000 to-stone-200 py-16"></div>
 <footer class="bg-neutral-900 text-neutral-300 ">
     {{-- Main Content --}}
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">

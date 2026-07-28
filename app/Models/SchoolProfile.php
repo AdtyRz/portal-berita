@@ -20,12 +20,23 @@ class SchoolProfile extends Model
         'founded_year',
         'accreditation',
         'principal_name',
+        
+        // Social Media Links
         'facebook',
         'instagram',
         'twitter',
         'youtube',
         'linkedin',
         'tiktok',
+        
+        // Social Media Embed Codes (BARU)
+        'instagram_embed',
+        'tiktok_embed',
+        'youtube_embed',
+        'facebook_embed',
+        'twitter_embed',
+        
+        // Branding
         'logo',
         'favicon',
         'cover_image',

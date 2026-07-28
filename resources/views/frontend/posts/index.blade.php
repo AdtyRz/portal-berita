@@ -3,9 +3,9 @@
 @section('title', isset($category) ? $category->name : 'News')
 
 @section('content')
-    <div class="h-32 md:h-24"></div>
-    <section class="py-16">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="bg-gradient-to-b from-stone-500 via-stone-000 to-stone-200 h-32 md:h-24"></div>
+    <section class="bg-stone-200 py-16">
+        <div class="bg-stone-200 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="mb-8">
                 <h1 class="text-4xl font-bold text-neutral-900 mb-2" style="font-family: var(--font-heading);">
                     {{ isset($category) ? $category->name : 'Latest News' }}
@@ -16,7 +16,7 @@
             </div>
 
             {{-- Search & Filter --}}
-            <div class="bg-white border border-neutral-200 rounded-2xl p-6 mb-8">
+            <div class="bg-stone-100 border border-neutral-200 rounded-2xl p-6 mb-8">
                 <form method="GET" class="flex flex-col md:flex-row gap-4">
                     <input type="text" name="search" value="{{ request('search') }}" placeholder="Search articles..." class="flex-1 px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900/10 focus:border-neutral-400">
                     <button type="submit" class="inline-flex items-center justify-center px-6 py-2.5 text-sm font-medium text-white bg-neutral-900 rounded-lg hover:bg-neutral-800">Search</button>
@@ -27,9 +27,9 @@
             </div>
 
             {{-- Posts Grid --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-stone-200 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @forelse($posts as $post)
-                    <article class="bg-white rounded-2xl overflow-hidden border border-neutral-200 group hover:shadow-lg transition-shadow">
+                    <article class="bg-stone-100 rounded-2xl overflow-hidden border border-neutral-200 group hover:shadow-lg transition-shadow">
                         <a href="{{ route('frontend.posts.show', $post->slug) }}" class="block">
                             <div class="aspect-[16/9] overflow-hidden bg-neutral-100">
                                 <img src="{{ $post->thumbnail_url }}" alt="{{ $post->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
