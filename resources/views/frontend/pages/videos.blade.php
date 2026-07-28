@@ -4,8 +4,8 @@
 @section('title', 'Videos')
 
 
-<div class="bg-neutral-200 h-32 md:h-24"></div>
-    <section class="bg-gradient-to-b from-neutral-200 via-neutral-000 to-white relative">
+<div class="bg-stone-400 h-32 md:h-24"></div>
+    <section class="bg-gradient-to-b from-stone-400 via-stone-000 to-stone-200 relative">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
             <div class="max-w-3xl">
                 <span class="text-xs font-bold text-red-600 uppercase tracking-wider">Watch</span>
@@ -15,7 +15,7 @@
         </div>
     </section>
 
-    <section class="py-16">
+    <section class="bg-stone-200 py-16">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <form method="GET" class="mb-10 max-w-xl">
                 <div class="relative">

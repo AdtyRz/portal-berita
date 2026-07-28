@@ -29,12 +29,15 @@ class SchoolProfile extends Model
         'linkedin',
         'tiktok',
         
-        // Social Media Embed Codes (BARU)
-        'instagram_embed',
-        'tiktok_embed',
-        'youtube_embed',
-        'facebook_embed',
-        'twitter_embed',
+    // Social Media Embed Codes
+    'instagram_embed_1',
+    'instagram_embed_2',
+    'tiktok_embed_1',
+    'tiktok_embed_2',
+    'youtube_embed_1',
+    'youtube_embed_2',
+    'facebook_embed_1',
+    'facebook_embed_2',
         
         // Branding
         'logo',

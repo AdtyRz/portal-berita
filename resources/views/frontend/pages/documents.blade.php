@@ -3,8 +3,8 @@
 @section('content')
 @section('title', 'Documents')
 
-<div class="bg-neutral-200 h-32 md:h-24"></div>
-    <section class="bg-gradient-to-b from-neutral-200 via-neutral-000 to-white relative">
+<div class="bg-neutral-400 h-32 md:h-24"></div>
+    <section class="bg-gradient-to-b from-neutral-400 via-neutral-000 to-stone-200 relative">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
             <div class="max-w-3xl">
                 <span class="text-xs font-bold text-blue-600 uppercase tracking-wider">Resources</span>
@@ -14,7 +14,7 @@
         </div>
     </section>
 
-    <section class="py-16">
+    <section class="bg-stone-200 py-16">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row gap-4 mb-10">
                 <form method="GET" class="flex-1">
@@ -22,11 +22,11 @@
                         <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search documents..." class="w-full pl-12 pr-4 py-3 bg-white border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900/10 focus:border-neutral-400">
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search documents..." class="w-full pl-12 pr-4 py-3 bg-stone-100 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900/10 focus:border-neutral-400">
                     </div>
                 </form>
                 <form method="GET" class="md:w-48">
-                    <select name="category" onchange="this.form.submit()" class="w-full px-4 py-3 bg-white border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900/10 focus:border-neutral-400">
+                    <select name="category" onchange="this.form.submit()" class="w-full px-4 py-3 bg-stone-100 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900/10 focus:border-neutral-400">
                         <option value="">All Categories</option>
                         <option value="academic" @selected(request('category') === 'academic')>Academic</option>
                         <option value="administrative" @selected(request('category') === 'administrative')>Administrative</option>

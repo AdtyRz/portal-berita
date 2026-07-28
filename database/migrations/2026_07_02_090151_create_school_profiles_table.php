@@ -32,11 +32,15 @@ return new class extends Migration
             $table->string('linkedin')->nullable();
             $table->string('tiktok')->nullable();
             
-            // Social Media Embed Codes
-            $table->text('instagram_embed')->nullable();
-            $table->text('tiktok_embed')->nullable();
-            $table->text('youtube_embed')->nullable();
-            $table->text('facebook_embed')->nullable();
+            // Social Media Embed Codes (2 Input per platform)
+            $table->text('instagram_embed_1')->nullable();
+            $table->text('instagram_embed_2')->nullable();
+            $table->text('tiktok_embed_1')->nullable();
+            $table->text('tiktok_embed_2')->nullable();
+            $table->text('youtube_embed_1')->nullable();
+            $table->text('youtube_embed_2')->nullable();
+            $table->text('facebook_embed_1')->nullable();
+            $table->text('facebook_embed_2')->nullable();
             
             // Branding
             $table->string('logo')->nullable();

@@ -3,8 +3,8 @@
 @section('content')
 @section('title', 'Agendas & Events')
 
-    <div class="bg-neutral-200 h-32 md:h-24"></div>
-    <section class="bg-gradient-to-b from-neutral-200 via-neutral-000 to-white relative">
+    <div class="bg-stone-400 h-32 md:h-24"></div>
+    <section class="bg-gradient-to-b from-stone-400 via-neutral-000 to-stone-200 relative">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
             <div class="max-w-3xl">
                 <span class="text-xs font-bold text-blue-600 uppercase tracking-wider">Calendar</span>
@@ -14,6 +14,7 @@
         </div>
     </section>
 
+    <div class="bg-stone-200">
     <section class="py-16">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <form method="GET" class="mb-10 max-w-xl">
@@ -27,7 +28,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @forelse($agendas as $agenda)
-                    <article class="bg-white rounded-2xl border border-neutral-200 overflow-hidden hover:shadow-lg transition-shadow">
+                    <article class="bg-stone-100 rounded-2xl border border-neutral-200 overflow-hidden hover:shadow-lg transition-shadow">
                         @if($agenda->thumbnail)
                             <a href="{{ route('frontend.agendas.show', $agenda->slug) }}" class="block aspect-[16/10] overflow-hidden bg-neutral-100">
                                 <img src="{{ $agenda->thumbnail_url }}" alt="{{ $agenda->title }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
@@ -76,4 +77,5 @@
             @endif
         </div>
     </section>
+    </div>
 @endsection

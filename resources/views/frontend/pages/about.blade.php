@@ -5,7 +5,7 @@
 
 @section('content')
 
-<div class="bg-gradient-to-t from-neutral-500 via-neutral-200 to-white h-32 md:h-24"></div>
+<div class="bg-gradient-to-t from-stone-500 via-neutral-200 to-stone400 h-32 md:h-24"></div>
 
     {{-- Hero Section --}}
     <section class="relative bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 text-white py-20 overflow-hidden">
@@ -40,8 +40,9 @@
             @endif
         </div>
     </section>
-    <div class="bg-gradient-to-b from-neutral-500 via-neutral-300 to-white h-32 md:h-24"></div>
+    <div class="bg-gradient-to-b from-stone-500 via-neutral-300 to-stone-200 h-32 md:h-24"></div>
 
+    <div class="bg-stone-200">
     {{-- Description --}}
     @if($schoolProfile->description)
     <section class="">
@@ -60,7 +61,7 @@
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 @if($schoolProfile->vision)
-                <div class="bg-white rounded-2xl p-8 shadow-sm border border-neutral-200 hover:shadow-lg transition-shadow">
+                <div class="bg-stone-100 rounded-2xl p-8 shadow-sm border border-neutral-200 hover:shadow-lg transition-shadow">
                     <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white mb-4">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -73,7 +74,7 @@
                 @endif
 
                 @if(count($schoolProfile->mission_list) > 0)
-                <div class="bg-white rounded-2xl p-8 shadow-sm border border-neutral-200 hover:shadow-lg transition-shadow">
+                <div class="bg-stone-100 rounded-2xl p-8 shadow-sm border border-neutral-200 hover:shadow-lg transition-shadow">
                     <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-orange-500 flex items-center justify-center text-white mb-4">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -109,7 +110,7 @@
         <span class="text-xs font-bold text-red-600 uppercase tracking-wider">Pesan Dari</span>
         <h2 class="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mt-2 mb-8" style="font-family: var(--font-heading);">Kepala Sekolah</h2>
 
-        <div class="bg-white dark:bg-neutral-800 rounded-2xl p-8 md:p-12 shadow-lg border border-neutral-200 dark:border-neutral-700">
+        <div class="bg-stone-100 dark:bg-neutral-800 rounded-2xl p-8 md:p-12 shadow-lg border border-neutral-200 dark:border-neutral-700">
             {{-- Foto Kepala Sekolah --}}
             <div class="w-24 h-24 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4 overflow-hidden">
                 @if($pPhoto)
@@ -133,5 +134,6 @@
         </div>
     </div>
 </section>
+</div>
 @endif
 @endsection

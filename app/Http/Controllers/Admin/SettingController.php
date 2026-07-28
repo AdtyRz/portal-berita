@@ -13,6 +13,7 @@ class SettingController extends Controller
     public function index()
     {
         $profile = SchoolProfile::getCurrent();
+
         return view('admin.settings.index', compact('profile'));
     }
 
@@ -29,9 +30,9 @@ class SettingController extends Controller
             'phone' => ['nullable', 'string', 'max:50'],
             'email' => ['nullable', 'email', 'max:255'],
             'website' => ['nullable', 'url', 'max:255'],
-            'founded_year' => ['nullable', 'integer', 'min:1900', 'max:' . date('Y')],
+            'founded_year' => ['nullable', 'integer', 'min:1900', 'max:'.date('Y')],
             'accreditation' => ['nullable', 'string', 'max:50'],
-            
+
             // Social Media Links
             'facebook' => ['nullable', 'url', 'max:255'],
             'instagram' => ['nullable', 'url', 'max:255'],
@@ -39,19 +40,22 @@ class SettingController extends Controller
             'youtube' => ['nullable', 'url', 'max:255'],
             'linkedin' => ['nullable', 'url', 'max:255'],
             'tiktok' => ['nullable', 'url', 'max:255'],
-            
+
             // Social Media Embed Codes
-            'instagram_embed' => ['nullable', 'string'],
-            'tiktok_embed' => ['nullable', 'string'],
-            'youtube_embed' => ['nullable', 'string'],
-            'facebook_embed' => ['nullable', 'string'],
-            'twitter_embed' => ['nullable', 'string'],
-            
+            'instagram_embed_1' => ['nullable', 'string'],
+            'instagram_embed_2' => ['nullable', 'string'],
+            'tiktok_embed_1' => ['nullable', 'string'],
+            'tiktok_embed_2' => ['nullable', 'string'],
+            'youtube_embed_1' => ['nullable', 'string'],
+            'youtube_embed_2' => ['nullable', 'string'],
+            'facebook_embed_1' => ['nullable', 'string'],
+            'facebook_embed_2' => ['nullable', 'string'],
+
             // Branding
             'logo' => ['nullable', 'image', 'max:2048'],
             'favicon' => ['nullable', 'image', 'max:1024'],
             'cover_image' => ['nullable', 'image', 'max:5120'],
-            
+
             'principal_name' => ['nullable', 'string', 'max:255'],
             'principal_message' => ['nullable', 'string'],
             'principal_photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
@@ -61,17 +65,23 @@ class SettingController extends Controller
 
         // Handle file uploads
         if ($request->hasFile('logo')) {
-            if ($profile->logo) Storage::disk('public')->delete($profile->logo);
+            if ($profile->logo) {
+                Storage::disk('public')->delete($profile->logo);
+            }
             $validated['logo'] = $request->file('logo')->store('school', 'public');
         }
 
         if ($request->hasFile('favicon')) {
-            if ($profile->favicon) Storage::disk('public')->delete($profile->favicon);
+            if ($profile->favicon) {
+                Storage::disk('public')->delete($profile->favicon);
+            }
             $validated['favicon'] = $request->file('favicon')->store('school', 'public');
         }
 
         if ($request->hasFile('cover_image')) {
-            if ($profile->cover_image) Storage::disk('public')->delete($profile->cover_image);
+            if ($profile->cover_image) {
+                Storage::disk('public')->delete($profile->cover_image);
+            }
             $validated['cover_image'] = $request->file('cover_image')->store('school', 'public');
         }
 
@@ -80,7 +90,7 @@ class SettingController extends Controller
             if ($oldPhoto && Storage::disk('public')->exists($oldPhoto)) {
                 Storage::disk('public')->delete($oldPhoto);
             }
-            
+
             $photoPath = $request->file('principal_photo')->store('principal-photos', 'public');
             Setting::set('principal_photo', $photoPath, 'image', 'school_profile');
         }

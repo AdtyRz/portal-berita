@@ -5,9 +5,10 @@
 @section('metaDescription', $agenda->meta_description ?? Str::limit($agenda->description, 160))
 
 @section('content')
-<div class="h-32 md:h-24"></div>
+<div class="bg-gradient-to-b from-stone-400 via-neutral-000 to-stone-200 h-32 md:h-24"></div>
+<div class="bg-stone-200 min-h-screen">
     <article class="py-12">
-        <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 ">
             {{-- Breadcrumb --}}
             <nav class="flex items-center gap-2 text-sm text-neutral-500 mb-8">
                 <a href="{{ route('home') }}" class="hover:text-neutral-900">Home</a>
@@ -123,4 +124,5 @@
             </div>
         </div>
     </article>
+</div>
 @endsection
